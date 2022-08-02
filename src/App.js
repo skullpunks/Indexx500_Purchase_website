@@ -11,6 +11,13 @@ import { CheckCircleIcon, WarningIcon } from "@chakra-ui/icons";
 import { Tooltip } from "@chakra-ui/react";
 import { toHex, truncateAddress } from "./utils";
 import { ethers } from "ethers";
+import Web3Modal from "web3modal";
+import { providerOptions } from "./providerOptions";
+
+const web3Modal = new Web3Modal({
+  cacheProvider: false, // optional
+  providerOptions // required
+});
 
 const paymentABI = [
   {
@@ -807,6 +814,7 @@ const chainlinkABI = [
 
 export default function Home() {
   const [provider, setProvider] = useState();
+  const [library, setLibrary] = useState();
   const [account, setAccount] = useState();
   const [signer, setSigner] = useState("");
   const [error, setError] = useState("");
@@ -859,18 +867,21 @@ export default function Home() {
 
   const connectWallet = async () => {
     try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum)
-      await provider.send("eth_requestAccounts", []);
-      const signer = provider.getSigner();
-      const accounts = await signer.getAddress();
-      const { chainId }  = await provider.getNetwork();
+      const provider = await web3Modal.connect();
+      const library = new ethers.providers.Web3Provider(provider);
+      const accounts = await library.listAccounts();
+      const network = await library.getNetwork();
       setProvider(provider);
-      if (accounts) setAccount(accounts);
-      setChainId(chainId);
+      setLibrary(library);
+      if (accounts) setAccount(accounts[0]);
+      setChainId(network.chainId);
+
+      const signer = library.getSigner();
       setSigner(signer);
-      if (chainId !== 97) {
-        alert("Switch to BSC Network");
-        selectPayment();
+      alert(network.chainId);
+      if(network.chainId !== 97){
+        alert("chain not 97");
+        await selectNetwork(library.provider);
       }
     } catch (error) {
       setError(error);
@@ -963,24 +974,28 @@ export default function Home() {
     setToken(Math.round(rate * 100) / 100);
   };
 
-  const selectPayment = async () => {
+  const selectNetwork = async (asset) => {
     try {
-      window.ethereum.request({
-        method: "wallet_addEthereumChain",
-        params: [{
-            chainId: toHex(97),
-            rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545"],
-            chainName: "BSC Test Chain",
-            nativeCurrency: {
-                name: "BNB",
-                symbol: "BNB",
-                decimals: 18
-            },
-            blockExplorerUrls: ["https://polygonscan.com/"]
-        }]
-    });
+      alert("net change");
+      await asset.send('wallet_switchEthereumChain', [{ chainId: `0x13881` }])
     } catch (switchError) {
-      console.log(switchError);
+      if (switchError.code === 4902) {
+        try {
+          await asset.request({
+            method: 'wallet_addEthereumChain',
+            params: [{
+              chainId: '0x13881',
+              rpcUrls: ['https://api.harmony.one'],
+              chainName: 'Harmony Mainnet',
+              nativeCurrency: { name: 'ONE', decimals: 18, symbol: 'ONE' },
+              blockExplorerUrls: ['https://explorer.harmony.one'],
+              iconUrls: ['https://harmonynews.one/wp-content/uploads/2019/11/slfdjs.png'],
+            }],
+          })
+        } catch (error) {
+          setError(error);
+        }
+      }
     }
   };
 
@@ -996,11 +1011,25 @@ export default function Home() {
     refreshState();
   };
 
-  useEffect(() => {
-    // if (web3Modal.cachedProvider) {
-    //   connectWallet();
-    // }
-  }, []);
+  const indexPrice = async() => {
+
+    let spprice = 0;
+    let spaddr = "0xb24D1DeE5F9a3f761D286B56d2bC44CE1D02DF7e";
+    let rpcProvider = new ethers.providers.JsonRpcProvider(
+      "https://bsc-dataseed1.binance.org/"
+    );
+   
+    const spFeed = new ethers.Contract(spaddr, chainlinkABI, rpcProvider);
+    await spFeed.latestRoundData().then((roundData) => {
+      spprice = roundData[1] / 10000000000;
+      spprice =  Math.round(spprice * 100) / 100
+      return spprice;
+
+    });
+
+
+
+  }
 
   useEffect(() => {
     if (provider?.on) {
@@ -1079,7 +1108,7 @@ export default function Home() {
           <Text>{`Network ID: ${chainId ? chainId : "No Network"}`}</Text>
         </VStack>
         <VStack>
-          <Button onClick={selectPayment}>Select Payment Option</Button>
+          <Button>Select Payment Option</Button>
           <Select placeholder="Select Payment" onChange={handlePayment}>
             <option value="0x0000000000000000000000000000000000000000">
               BNB: Binance Coin
@@ -1110,6 +1139,8 @@ export default function Home() {
         <Text>{error ? error.message : null}</Text>
         <Button onClick={payCrypto}>Payment</Button>
         <Button onClick={approve}>Approve</Button>
+        <Button onClick={indexPrice}>live price</Button>
+
       </VStack>
     </>
   );
