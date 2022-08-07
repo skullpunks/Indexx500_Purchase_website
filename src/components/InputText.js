@@ -18,6 +18,7 @@ const InputText = ({ value, icon, position, onChange }) => {
               backgroundColor: "#FFF",
               border: "1px solid #0052CC",
               borderRadius: 4,
+              marginRight: 6
             }}
           >
             {Coins.map((coin, index) => (

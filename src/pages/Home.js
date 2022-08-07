@@ -104,7 +104,7 @@ const Home = ({ setStage }) => {
                 progressBar={89}
               />
             </Col>
-            <Col xl={6} md={6}>
+            <Col xl={6} md={6} style={{ marginTop: 25 }}>
               <CardComponent
                 title="PRO-ICO STAGE 3"
                 discount="9%"
@@ -112,7 +112,7 @@ const Home = ({ setStage }) => {
                 progressBar={10}
               />
             </Col>
-            <Col xl={6} md={6}>
+            <Col xl={6} md={6} style={{ marginTop: 25 }}>
               <CardComponent
                 title="PRO-ICO STAGE 4"
                 discount="6%"
@@ -120,7 +120,7 @@ const Home = ({ setStage }) => {
                 progressBar={10}
               />
             </Col>
-            <Col xl={6} md={6}>
+            <Col xl={6} md={6} style={{ marginTop: 25 }}>
               <CardComponent
                 title="PRO-ICO STAGE 5"
                 discount="3%"
@@ -128,7 +128,7 @@ const Home = ({ setStage }) => {
                 progressBar={10}
               />
             </Col>
-            <Col xl={6} md={6}>
+            <Col xl={6} md={6} style={{ marginTop: 25 }}>
               <CardComponent
                 title="PRO-ICO STAGE 6"
                 discount="1%"

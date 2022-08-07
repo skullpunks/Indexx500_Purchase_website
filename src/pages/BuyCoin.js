@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Form } from "react-bootstrap";
 import Header from "../components/Header";
 import LogoIcon from "../assets/icons/logo.svg";
 import BottomArrow from "../assets/icons/bottom-arrow.svg";
@@ -7,7 +8,7 @@ import InputText from "../components/InputText";
 
 const BuyCoin = () => {
   const [to, setTo] = useState(Coins[0]);
-  const [from, setFrom] = useState(Coins[Coins.length - 1]);
+  const [from, setFrom] = useState({ label: "indexx500", icon: LogoIcon });
 
   return (
     <div>
@@ -30,13 +31,39 @@ const BuyCoin = () => {
           SWAP
         </h3>
         <p style={{ color: "#808080" }}>Trade token in an instant</p>
-        <InputText icon={to.icon} value={to.label} position={["bottom"]} onChange={(item) => setTo(item)} />
+        <InputText
+          icon={to.icon}
+          value={to.label}
+          position={["left"]}
+          onChange={(item) => setTo(item)}
+        />
         <img
           src={BottomArrow}
           alt="bottom-arrow"
           style={{ width: 32, height: 32, marginBottom: 15 }}
         />
-        <InputText icon={from.icon} value={from.label} onChange={(item) => setFrom(item)} />
+        {/* <InputText icon={from.icon} value={from.label} onChange={(item) => setFrom(item)} /> */}
+        <div
+          style={{ display: "flex", justifyContent: "center", marginRight: 50 }}
+        >
+          <div style={{ display: "grid" }}>
+            <img
+              src={from.icon}
+              alt="icon"
+              style={{ height: 32, width: 32, margin: "auto" }}
+            />
+            <span style={{ fontSize: 10, margin: 0, color: "#808080" }}>
+              {from.label}
+            </span>
+          </div>
+          <div>
+            <Form.Control
+              type="text"
+              id="inputBusd"
+              aria-describedby="passwordHelpBlock"
+            />
+          </div>
+        </div>
       </div>
       <div className="buy-now-btn">BUY</div>
       <div>
