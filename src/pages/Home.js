@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -16,7 +17,8 @@ const web3Modal = new Web3Modal({
   providerOptions, // required
 });
 
-const Home = ({ setStage }) => {
+const Home = () => {
+  const navigate= useNavigate();
   const [provider, setProvider] = useState();
   const [library, setLibrary] = useState();
   const [account, setAccount] = useState();
@@ -26,8 +28,9 @@ const Home = ({ setStage }) => {
 
   const selectNetwork = async (asset) => {
     try {
-      alert("net change");
+      // alert("net change");
       await asset.send("wallet_switchEthereumChain", [{ chainId: `0x13881` }]);
+      navigate("/buy-token");
     } catch (switchError) {
       if (switchError.code === 4902) {
         try {
@@ -46,6 +49,7 @@ const Home = ({ setStage }) => {
               },
             ],
           });
+          navigate("/buy-token");
         } catch (error) {
           setError(error);
         }
@@ -66,10 +70,11 @@ const Home = ({ setStage }) => {
 
       const signer = library.getSigner();
       setSigner(signer);
-      alert(network.chainId);
+      // alert(network.chainId);
       if (network.chainId !== 97) {
-        alert("chain not 97");
+        // alert("chain not 97");
         await selectNetwork(library.provider);
+        navigate("/buy-token");
       }
     } catch (error) {
       setError(error);

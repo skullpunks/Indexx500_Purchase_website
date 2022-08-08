@@ -7,7 +7,7 @@ const Header = () => {
   return (
     <Navbar className="main-header" expand="lg">
       <Container>
-        <Navbar.Brand href="#home">
+        <Navbar.Brand href="/home">
           <img src={LogoIcon} alt="logo" className="indexx-icon" />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
