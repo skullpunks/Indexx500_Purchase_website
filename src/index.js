@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import { ChakraProvider } from "@chakra-ui/react";
 import App from "./App";
@@ -10,21 +10,27 @@ import BuyCoin from "./pages/BuyCoin";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/*" element={<Home />} />
-        <Route path="/buy-token" element={<BuyCoin />} />
-        <Route
-          path="/app"
-          element={
-            <ChakraProvider>
-              <App />
-            </ChakraProvider>
-          }
-        />
-      </Routes>
-    </BrowserRouter>
-  </React.StrictMode>
-);
+const Index = () => {
+  const [signer, setSigner] = useState({});
+
+  return (
+    <React.StrictMode>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/*" element={<Home setSigner={setSigner} />} />
+          <Route path="/buy-token" element={<BuyCoin signer={signer} />} />
+          <Route
+            path="/app"
+            element={
+              <ChakraProvider>
+                <App />
+              </ChakraProvider>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </React.StrictMode>
+  );
+};
+
+root.render(<Index />);

@@ -15,16 +15,17 @@ const web3Modal = new Web3Modal({
   providerOptions, // required
 });
 
-const Home = () => {
+const Home = ({
+  setSigner
+}) => {
   const navigate = useNavigate();
   const [provider, setProvider] = useState();
   const [library, setLibrary] = useState();
   const [account, setAccount] = useState();
   const [chainId, setChainId] = useState();
-  const [signer, setSigner] = useState("");
+  // const [signer, setSigner] = useState("");
   const [error, setError] = useState("");
-  const [sprice,setSprice] = useState("")
-
+  const [sprice, setSprice] = useState("");
 
   const chainlinkABI = [
     {
@@ -32,14 +33,14 @@ const Home = () => {
       name: "decimals",
       outputs: [{ internalType: "uint8", name: "", type: "uint8" }],
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       inputs: [],
       name: "description",
       outputs: [{ internalType: "string", name: "", type: "string" }],
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       inputs: [{ internalType: "uint80", name: "_roundId", type: "uint80" }],
@@ -49,10 +50,10 @@ const Home = () => {
         { internalType: "int256", name: "answer", type: "int256" },
         { internalType: "uint256", name: "startedAt", type: "uint256" },
         { internalType: "uint256", name: "updatedAt", type: "uint256" },
-        { internalType: "uint80", name: "answeredInRound", type: "uint80" }
+        { internalType: "uint80", name: "answeredInRound", type: "uint80" },
       ],
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       inputs: [],
@@ -62,53 +63,54 @@ const Home = () => {
         { internalType: "int256", name: "answer", type: "int256" },
         { internalType: "uint256", name: "startedAt", type: "uint256" },
         { internalType: "uint256", name: "updatedAt", type: "uint256" },
-        { internalType: "uint80", name: "answeredInRound", type: "uint80" }
+        { internalType: "uint80", name: "answeredInRound", type: "uint80" },
       ],
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       inputs: [],
       name: "version",
       outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
       stateMutability: "view",
-      type: "function"
-    }
+      type: "function",
+    },
   ];
 
-const selectNetwork = async (asset) => {
+  const selectNetwork = async (asset) => {
     try {
       asset.request({
-        method: 'wallet_addEthereumChain',
+        method: "wallet_addEthereumChain",
         params: [
-            {
-                chainId: '0x61',
-                chainName: 'BSC Testnet',
-                rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545'],
-                blockExplorerUrls: ['https://explorer.binance.org/smart-testnet'],
-                nativeCurrency: {
-                    symbol: 'BNB',
-                    decimals: 18
-                }
-            }
-        ]});
+          {
+            chainId: "0x61",
+            chainName: "BSC Testnet",
+            rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545"],
+            blockExplorerUrls: ["https://explorer.binance.org/smart-testnet"],
+            nativeCurrency: {
+              symbol: "BNB",
+              decimals: 18,
+            },
+          },
+        ],
+      });
       // await asset.send('wallet_switchEthereumChain', [{ chainId: `0x61` }])
     } catch (switchError) {
-    console.log(switchError);
+      console.log(switchError);
     }
   };
 
   const connectWallet = async () => {
-    console.log('connect wallet')
+    console.log("connect wallet");
     try {
-      console.log('inside try')
+      console.log("inside try");
       const provider = await web3Modal.connect();
       const library = new ethers.providers.Web3Provider(provider);
       const accounts = await library.listAccounts();
       const network = await library.getNetwork();
-      console.log('accounts',accounts)
+      console.log("accounts", accounts);
       // console.log('provider',provider)
-      console.log('network',network)
+      console.log("network", network);
       setProvider(provider);
       setLibrary(library);
       if (accounts) setAccount(accounts[0]);
@@ -116,40 +118,36 @@ const selectNetwork = async (asset) => {
 
       const signer = library.getSigner();
       setSigner(signer);
-      alert(network.chainId);
+
       if (network.chainId !== 97) {
         // alert("chain not 97");
         await selectNetwork(library.provider);
-        navigate("/buy-token");
       }
+      navigate("/buy-token");
     } catch (error) {
       setError(error);
     }
   };
 
-  const indexPrice = async() => {
-
+  const indexPrice = async () => {
     let spprice = 0;
     let spaddr = "0xb24D1DeE5F9a3f761D286B56d2bC44CE1D02DF7e";
     let rpcProvider = new ethers.providers.JsonRpcProvider(
       "https://bsc-dataseed1.binance.org/"
     );
-   console.log('rpcProvider',rpcProvider)
+    console.log("rpcProvider", rpcProvider);
     const spFeed = new ethers.Contract(spaddr, chainlinkABI, rpcProvider);
     await spFeed.latestRoundData().then((roundData) => {
       spprice = roundData[1] / 10000000000;
-      spprice =  Math.round(spprice * 100) / 100
-      console.log('spprice',spprice)
-      setSprice(spprice)
+      spprice = Math.round(spprice * 100) / 100;
+      console.log("spprice", spprice);
+      setSprice(spprice);
       return spprice;
-
     });
-  }
-useEffect(() => {
-  indexPrice()
-}, [])
-
-
+  };
+  useEffect(() => {
+    indexPrice();
+  }, []);
 
   return (
     <div>

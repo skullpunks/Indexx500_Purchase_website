@@ -7,17 +7,17 @@ import { Coins } from "../utility/constant";
 import InputText from "../components/InputText";
 import { ethers } from "ethers";
 
-const BuyCoin = () => {
+const BuyCoin = ({
+  signer
+}) => {
   const [to, setTo] = useState(Coins[0]);
   const [from, setFrom] = useState({ label: "indexx500", icon: LogoIcon });
   const [token, setToken] = useState("");
-  const [payment, setPayment] = useState("");
+  const [payment, setPayment] = useState("BUSD");
   const [inputtoken, setInputtoken] = useState("");
-  const [signer, setSigner] = useState("");
+  // const [signer, setSigner] = useState("");
   const [error, setError] = useState("");
   const [account, setAccount] = useState();
-
-
 
   const chainlinkABI = [
     {
@@ -25,14 +25,14 @@ const BuyCoin = () => {
       name: "decimals",
       outputs: [{ internalType: "uint8", name: "", type: "uint8" }],
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       inputs: [],
       name: "description",
       outputs: [{ internalType: "string", name: "", type: "string" }],
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       inputs: [{ internalType: "uint80", name: "_roundId", type: "uint80" }],
@@ -42,10 +42,10 @@ const BuyCoin = () => {
         { internalType: "int256", name: "answer", type: "int256" },
         { internalType: "uint256", name: "startedAt", type: "uint256" },
         { internalType: "uint256", name: "updatedAt", type: "uint256" },
-        { internalType: "uint80", name: "answeredInRound", type: "uint80" }
+        { internalType: "uint80", name: "answeredInRound", type: "uint80" },
       ],
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       inputs: [],
@@ -55,18 +55,18 @@ const BuyCoin = () => {
         { internalType: "int256", name: "answer", type: "int256" },
         { internalType: "uint256", name: "startedAt", type: "uint256" },
         { internalType: "uint256", name: "updatedAt", type: "uint256" },
-        { internalType: "uint80", name: "answeredInRound", type: "uint80" }
+        { internalType: "uint80", name: "answeredInRound", type: "uint80" },
       ],
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       inputs: [],
       name: "version",
       outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
       stateMutability: "view",
-      type: "function"
-    }
+      type: "function",
+    },
   ];
   const icoAddress = "0x68A62a16d381fd8C11F092b3Eea68845C3Db721E";
 
@@ -76,41 +76,41 @@ const BuyCoin = () => {
         {
           internalType: "address",
           name: "_reserveWallet",
-          type: "address"
+          type: "address",
         },
         {
           internalType: "address",
           name: "_token",
-          type: "address"
+          type: "address",
         },
         {
           internalType: "address",
           name: "_timelockContract",
-          type: "address"
+          type: "address",
         },
         {
           internalType: "uint256",
           name: "_openingTime",
-          type: "uint256"
+          type: "uint256",
         },
         {
           internalType: "uint256",
           name: "_closingTime",
-          type: "uint256"
+          type: "uint256",
         },
         {
           internalType: "uint256",
           name: "_investorMinCap",
-          type: "uint256"
+          type: "uint256",
         },
         {
           internalType: "uint256",
           name: "_discount",
-          type: "uint256"
-        }
+          type: "uint256",
+        },
       ],
       stateMutability: "nonpayable",
-      type: "constructor"
+      type: "constructor",
     },
     {
       anonymous: false,
@@ -119,114 +119,114 @@ const BuyCoin = () => {
           indexed: true,
           internalType: "address",
           name: "purchaser",
-          type: "address"
+          type: "address",
         },
         {
           indexed: true,
           internalType: "address",
           name: "beneficiary",
-          type: "address"
+          type: "address",
         },
         {
           indexed: false,
           internalType: "uint256",
           name: "value",
-          type: "uint256"
+          type: "uint256",
         },
         {
           indexed: false,
           internalType: "uint256",
           name: "amount",
-          type: "uint256"
-        }
+          type: "uint256",
+        },
       ],
       name: "TokenPurchase",
-      type: "event"
+      type: "event",
     },
     {
       stateMutability: "payable",
-      type: "fallback"
+      type: "fallback",
     },
     {
       inputs: [
         {
           internalType: "address",
           name: "",
-          type: "address"
-        }
+          type: "address",
+        },
       ],
       name: "acceptedTokens",
       outputs: [
         {
           internalType: "uint256",
           name: "",
-          type: "uint256"
-        }
+          type: "uint256",
+        },
       ],
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       inputs: [
         {
           internalType: "address",
           name: "_beneficiary",
-          type: "address"
+          type: "address",
         },
         {
           internalType: "uint256",
           name: "_amount",
-          type: "uint256"
+          type: "uint256",
         },
         {
           internalType: "address",
           name: "tokenAddress",
-          type: "address"
-        }
+          type: "address",
+        },
       ],
       name: "buyIndexxFromAnyBEP20",
       outputs: [],
       stateMutability: "nonpayable",
-      type: "function"
+      type: "function",
     },
     {
       inputs: [
         {
           internalType: "address",
           name: "_beneficiary",
-          type: "address"
-        }
+          type: "address",
+        },
       ],
       name: "buyIndexxFromBNB",
       outputs: [],
       stateMutability: "payable",
-      type: "function"
+      type: "function",
     },
     {
       inputs: [
         {
           internalType: "uint256",
           name: "_discount",
-          type: "uint256"
-        }
+          type: "uint256",
+        },
       ],
       name: "changeDiscount",
       outputs: [],
       stateMutability: "nonpayable",
-      type: "function"
+      type: "function",
     },
     {
       inputs: [
         {
           internalType: "address",
           name: "_newAdmin",
-          type: "address"
-        }
+          type: "address",
+        },
       ],
       name: "changeIcoAdmin",
       outputs: [],
       stateMutability: "nonpayable",
-      type: "function"
+      type: "function",
     },
     {
       inputs: [],
@@ -235,30 +235,30 @@ const BuyCoin = () => {
         {
           internalType: "uint256",
           name: "",
-          type: "uint256"
-        }
+          type: "uint256",
+        },
       ],
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       inputs: [
         {
           internalType: "address",
           name: "",
-          type: "address"
-        }
+          type: "address",
+        },
       ],
       name: "contributions",
       outputs: [
         {
           internalType: "uint256",
           name: "",
-          type: "uint256"
-        }
+          type: "uint256",
+        },
       ],
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       inputs: [],
@@ -267,11 +267,11 @@ const BuyCoin = () => {
         {
           internalType: "uint256",
           name: "",
-          type: "uint256"
-        }
+          type: "uint256",
+        },
       ],
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       inputs: [],
@@ -280,11 +280,11 @@ const BuyCoin = () => {
         {
           internalType: "bool",
           name: "",
-          type: "bool"
-        }
+          type: "bool",
+        },
       ],
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       inputs: [],
@@ -293,11 +293,11 @@ const BuyCoin = () => {
         {
           internalType: "address",
           name: "",
-          type: "address"
-        }
+          type: "address",
+        },
       ],
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       inputs: [],
@@ -306,11 +306,11 @@ const BuyCoin = () => {
         {
           internalType: "uint256",
           name: "",
-          type: "uint256"
-        }
+          type: "uint256",
+        },
       ],
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       inputs: [],
@@ -319,11 +319,11 @@ const BuyCoin = () => {
         {
           internalType: "uint256",
           name: "",
-          type: "uint256"
-        }
+          type: "uint256",
+        },
       ],
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       inputs: [],
@@ -332,34 +332,34 @@ const BuyCoin = () => {
         {
           internalType: "address",
           name: "",
-          type: "address"
-        }
+          type: "address",
+        },
       ],
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       inputs: [
         {
           internalType: "uint256",
           name: "_openingTime",
-          type: "uint256"
+          type: "uint256",
         },
         {
           internalType: "uint256",
           name: "_closingTime",
-          type: "uint256"
+          type: "uint256",
         },
         {
           internalType: "uint256",
           name: "_discount",
-          type: "uint256"
-        }
+          type: "uint256",
+        },
       ],
       name: "scheduleSale",
       outputs: [],
       stateMutability: "nonpayable",
-      type: "function"
+      type: "function",
     },
     {
       inputs: [],
@@ -368,11 +368,11 @@ const BuyCoin = () => {
         {
           internalType: "uint256",
           name: "",
-          type: "uint256"
-        }
+          type: "uint256",
+        },
       ],
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       inputs: [],
@@ -381,11 +381,11 @@ const BuyCoin = () => {
         {
           internalType: "address",
           name: "",
-          type: "address"
-        }
+          type: "address",
+        },
       ],
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       inputs: [],
@@ -394,11 +394,11 @@ const BuyCoin = () => {
         {
           internalType: "address",
           name: "",
-          type: "address"
-        }
+          type: "address",
+        },
       ],
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       inputs: [],
@@ -407,16 +407,16 @@ const BuyCoin = () => {
         {
           internalType: "uint256",
           name: "",
-          type: "uint256"
-        }
+          type: "uint256",
+        },
       ],
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       stateMutability: "payable",
-      type: "receive"
-    }
+      type: "receive",
+    },
   ];
 
   const paymentABI = [
@@ -427,7 +427,7 @@ const BuyCoin = () => {
       outputs: [{ name: "", type: "string" }],
       payable: false,
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       constant: false,
@@ -436,19 +436,19 @@ const BuyCoin = () => {
       outputs: [],
       payable: false,
       stateMutability: "nonpayable",
-      type: "function"
+      type: "function",
     },
     {
       constant: false,
       inputs: [
         { name: "_spender", type: "address" },
-        { name: "_value", type: "uint256" }
+        { name: "_value", type: "uint256" },
       ],
       name: "approve",
       outputs: [],
       payable: false,
       stateMutability: "nonpayable",
-      type: "function"
+      type: "function",
     },
     {
       constant: true,
@@ -457,7 +457,7 @@ const BuyCoin = () => {
       outputs: [{ name: "", type: "bool" }],
       payable: false,
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       constant: false,
@@ -466,7 +466,7 @@ const BuyCoin = () => {
       outputs: [],
       payable: false,
       stateMutability: "nonpayable",
-      type: "function"
+      type: "function",
     },
     {
       constant: true,
@@ -475,20 +475,20 @@ const BuyCoin = () => {
       outputs: [{ name: "", type: "uint256" }],
       payable: false,
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       constant: false,
       inputs: [
         { name: "_from", type: "address" },
         { name: "_to", type: "address" },
-        { name: "_value", type: "uint256" }
+        { name: "_value", type: "uint256" },
       ],
       name: "transferFrom",
       outputs: [],
       payable: false,
       stateMutability: "nonpayable",
-      type: "function"
+      type: "function",
     },
     {
       constant: true,
@@ -497,7 +497,7 @@ const BuyCoin = () => {
       outputs: [{ name: "", type: "address" }],
       payable: false,
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       constant: true,
@@ -506,7 +506,7 @@ const BuyCoin = () => {
       outputs: [{ name: "", type: "uint256" }],
       payable: false,
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       constant: true,
@@ -515,7 +515,7 @@ const BuyCoin = () => {
       outputs: [{ name: "", type: "uint256" }],
       payable: false,
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       constant: true,
@@ -524,7 +524,7 @@ const BuyCoin = () => {
       outputs: [{ name: "", type: "uint256" }],
       payable: false,
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       constant: true,
@@ -533,7 +533,7 @@ const BuyCoin = () => {
       outputs: [{ name: "", type: "uint256" }],
       payable: false,
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       constant: false,
@@ -542,7 +542,7 @@ const BuyCoin = () => {
       outputs: [],
       payable: false,
       stateMutability: "nonpayable",
-      type: "function"
+      type: "function",
     },
     {
       constant: true,
@@ -551,19 +551,19 @@ const BuyCoin = () => {
       outputs: [{ name: "", type: "bool" }],
       payable: false,
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       constant: true,
       inputs: [
         { name: "", type: "address" },
-        { name: "", type: "address" }
+        { name: "", type: "address" },
       ],
       name: "allowed",
       outputs: [{ name: "", type: "uint256" }],
       payable: false,
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       constant: true,
@@ -572,7 +572,7 @@ const BuyCoin = () => {
       outputs: [{ name: "", type: "bool" }],
       payable: false,
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       constant: true,
@@ -581,7 +581,7 @@ const BuyCoin = () => {
       outputs: [{ name: "", type: "uint256" }],
       payable: false,
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       constant: false,
@@ -590,7 +590,7 @@ const BuyCoin = () => {
       outputs: [],
       payable: false,
       stateMutability: "nonpayable",
-      type: "function"
+      type: "function",
     },
     {
       constant: true,
@@ -599,7 +599,7 @@ const BuyCoin = () => {
       outputs: [{ name: "", type: "address" }],
       payable: false,
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       constant: true,
@@ -608,7 +608,7 @@ const BuyCoin = () => {
       outputs: [{ name: "", type: "address" }],
       payable: false,
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       constant: true,
@@ -617,31 +617,31 @@ const BuyCoin = () => {
       outputs: [{ name: "", type: "string" }],
       payable: false,
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       constant: false,
       inputs: [
         { name: "_to", type: "address" },
-        { name: "_value", type: "uint256" }
+        { name: "_value", type: "uint256" },
       ],
       name: "transfer",
       outputs: [],
       payable: false,
       stateMutability: "nonpayable",
-      type: "function"
+      type: "function",
     },
     {
       constant: false,
       inputs: [
         { name: "newBasisPoints", type: "uint256" },
-        { name: "newMaxFee", type: "uint256" }
+        { name: "newMaxFee", type: "uint256" },
       ],
       name: "setParams",
       outputs: [],
       payable: false,
       stateMutability: "nonpayable",
-      type: "function"
+      type: "function",
     },
     {
       constant: false,
@@ -650,7 +650,7 @@ const BuyCoin = () => {
       outputs: [],
       payable: false,
       stateMutability: "nonpayable",
-      type: "function"
+      type: "function",
     },
     {
       constant: false,
@@ -659,19 +659,19 @@ const BuyCoin = () => {
       outputs: [],
       payable: false,
       stateMutability: "nonpayable",
-      type: "function"
+      type: "function",
     },
     {
       constant: true,
       inputs: [
         { name: "_owner", type: "address" },
-        { name: "_spender", type: "address" }
+        { name: "_spender", type: "address" },
       ],
       name: "allowance",
       outputs: [{ name: "remaining", type: "uint256" }],
       payable: false,
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       constant: true,
@@ -680,7 +680,7 @@ const BuyCoin = () => {
       outputs: [{ name: "", type: "uint256" }],
       payable: false,
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       constant: true,
@@ -689,7 +689,7 @@ const BuyCoin = () => {
       outputs: [{ name: "", type: "bool" }],
       payable: false,
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       constant: false,
@@ -698,7 +698,7 @@ const BuyCoin = () => {
       outputs: [],
       payable: false,
       stateMutability: "nonpayable",
-      type: "function"
+      type: "function",
     },
     {
       constant: true,
@@ -707,7 +707,7 @@ const BuyCoin = () => {
       outputs: [{ name: "", type: "uint256" }],
       payable: false,
       stateMutability: "view",
-      type: "function"
+      type: "function",
     },
     {
       constant: false,
@@ -716,7 +716,7 @@ const BuyCoin = () => {
       outputs: [],
       payable: false,
       stateMutability: "nonpayable",
-      type: "function"
+      type: "function",
     },
     {
       constant: false,
@@ -725,89 +725,89 @@ const BuyCoin = () => {
       outputs: [],
       payable: false,
       stateMutability: "nonpayable",
-      type: "function"
+      type: "function",
     },
     {
       inputs: [
         { name: "_initialSupply", type: "uint256" },
         { name: "_name", type: "string" },
         { name: "_symbol", type: "string" },
-        { name: "_decimals", type: "uint256" }
+        { name: "_decimals", type: "uint256" },
       ],
       payable: false,
       stateMutability: "nonpayable",
-      type: "constructor"
+      type: "constructor",
     },
     {
       anonymous: false,
       inputs: [{ indexed: false, name: "amount", type: "uint256" }],
       name: "Issue",
-      type: "event"
+      type: "event",
     },
     {
       anonymous: false,
       inputs: [{ indexed: false, name: "amount", type: "uint256" }],
       name: "Redeem",
-      type: "event"
+      type: "event",
     },
     {
       anonymous: false,
       inputs: [{ indexed: false, name: "newAddress", type: "address" }],
       name: "Deprecate",
-      type: "event"
+      type: "event",
     },
     {
       anonymous: false,
       inputs: [
         { indexed: false, name: "feeBasisPoints", type: "uint256" },
-        { indexed: false, name: "maxFee", type: "uint256" }
+        { indexed: false, name: "maxFee", type: "uint256" },
       ],
       name: "Params",
-      type: "event"
+      type: "event",
     },
     {
       anonymous: false,
       inputs: [
         { indexed: false, name: "_blackListedUser", type: "address" },
-        { indexed: false, name: "_balance", type: "uint256" }
+        { indexed: false, name: "_balance", type: "uint256" },
       ],
       name: "DestroyedBlackFunds",
-      type: "event"
+      type: "event",
     },
     {
       anonymous: false,
       inputs: [{ indexed: false, name: "_user", type: "address" }],
       name: "AddedBlackList",
-      type: "event"
+      type: "event",
     },
     {
       anonymous: false,
       inputs: [{ indexed: false, name: "_user", type: "address" }],
       name: "RemovedBlackList",
-      type: "event"
+      type: "event",
     },
     {
       anonymous: false,
       inputs: [
         { indexed: true, name: "owner", type: "address" },
         { indexed: true, name: "spender", type: "address" },
-        { indexed: false, name: "value", type: "uint256" }
+        { indexed: false, name: "value", type: "uint256" },
       ],
       name: "Approval",
-      type: "event"
+      type: "event",
     },
     {
       anonymous: false,
       inputs: [
         { indexed: true, name: "from", type: "address" },
         { indexed: true, name: "to", type: "address" },
-        { indexed: false, name: "value", type: "uint256" }
+        { indexed: false, name: "value", type: "uint256" },
       ],
       name: "Transfer",
-      type: "event"
+      type: "event",
     },
     { anonymous: false, inputs: [], name: "Pause", type: "event" },
-    { anonymous: false, inputs: [], name: "Unpause", type: "event" }
+    { anonymous: false, inputs: [], name: "Unpause", type: "event" },
   ];
   const setInputValue = async (e) => {
     let inputs = e.target.value;
@@ -854,8 +854,8 @@ const BuyCoin = () => {
 
   const handlePayment = async (e) => {
     const tokenContract = e;
-    setPayment(e);
-    setTo(e)
+    setPayment(e.label);
+    setTo(e.label);
     // await getAssignTokens();
     let addr = "";
     let tokenPrice = 0;
@@ -899,11 +899,15 @@ const BuyCoin = () => {
 
   const payCrypto = async () => {
     try {
-      const ico_contract = new ethers.Contract(icoAddress, icoABI, signer);
+      const ico_contract = new ethers.Contract(
+        icoAddress,
+        icoABI,
+        signer
+      );
       let tx;
       if (payment === "0x0000000000000000000000000000000000000000") {
         tx = await ico_contract.buyIndexxFromBNB(account, {
-          value: ethers.utils.parseUnits(inputtoken, "ether")
+          value: ethers.utils.parseUnits(inputtoken, "ether"),
         });
       } else if (payment !== "") {
         tx = await ico_contract.buyIndexxFromAnyBEP20(
@@ -924,7 +928,17 @@ const BuyCoin = () => {
 
   const approve = async () => {
     try {
-      const paymentContract = new ethers.Contract(payment, paymentABI, signer);
+      console.log(`payment`, payment);
+      console.log(`paymentABI`, paymentABI);
+      console.log(`signer`, signer);
+      const paymentContract = new ethers.Contract(
+        payment,
+        paymentABI,
+        signer
+      );
+
+      console.log(`paymentContract`, paymentContract);
+
       const tx = await paymentContract.approve(
         "0x68A62a16d381fd8C11F092b3Eea68845C3Db721E",
         ethers.utils.parseUnits(inputtoken, "ether")
@@ -938,7 +952,7 @@ const BuyCoin = () => {
       setError(error);
     }
   };
-   
+
   return (
     <div>
       <Header />
@@ -955,7 +969,6 @@ const BuyCoin = () => {
           style={{ width: 64, height: 64 }}
           alt="indexx logo"
         />
-        <h3 style={{ color: "#1950d5", fontSize: 18 }}>indexx500</h3>
         <h3 style={{ marginTop: 20, color: "#808080", marginBottom: 0 }}>
           SWAP
         </h3>
@@ -964,9 +977,9 @@ const BuyCoin = () => {
           icon={to.icon}
           value={to.label}
           position={["left"]}
-          onChange={(e)=>handlePayment(e)}
+          onChange={(e) => handlePayment(e)}
           inputtoken={inputtoken}
-          handleChange = {setInputValue}
+          handleChange={setInputValue}
         />
         <img
           src={BottomArrow}
@@ -997,13 +1010,15 @@ const BuyCoin = () => {
           </div>
         </div>
       </div>
-      {
-        to.label === "BNB" || to.label === 'Stripe' ? (
-          <div className="buy-now-btn" onClick={payCrypto}>BUY</div>
-        ) : (
-          <div className="buy-now-btn" onClick={approve}>APPROVE</div>
-        )
-      }
+      {to.label === "BNB" || to.label === "Stripe" ? (
+        <div className="buy-now-btn" onClick={payCrypto}>
+          BUY
+        </div>
+      ) : (
+        <div className="buy-now-btn" onClick={approve}>
+          APPROVE
+        </div>
+      )}
       <div>
         <p className="guide-lines text-center">
           Payment bought with discount will be released as per time lock
