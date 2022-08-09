@@ -1018,7 +1018,7 @@ export default function Home() {
     let rpcProvider = new ethers.providers.JsonRpcProvider(
       "https://bsc-dataseed1.binance.org/"
     );
-   
+   console.log('rpcProvider',rpcProvider)
     const spFeed = new ethers.Contract(spaddr, chainlinkABI, rpcProvider);
     await spFeed.latestRoundData().then((roundData) => {
       spprice = roundData[1] / 10000000000;
@@ -1026,9 +1026,7 @@ export default function Home() {
       return spprice;
 
     });
-
-
-
+    console.log("spFeed",spFeed)
   }
 
   useEffect(() => {

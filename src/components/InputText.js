@@ -3,7 +3,7 @@ import { Form } from "react-bootstrap";
 import { Popover } from "react-tiny-popover";
 import { Coins } from "../utility/constant";
 
-const InputText = ({ value, icon, position, onChange }) => {
+const InputText = ({ value, icon, position, onChange,handleChange,inputtoken }) => {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   return (
@@ -77,6 +77,8 @@ const InputText = ({ value, icon, position, onChange }) => {
         <Form.Control
           type="text"
           id="inputBusd"
+          value={inputtoken}
+          onChange={handleChange}
           aria-describedby="passwordHelpBlock"
         />
       </div>

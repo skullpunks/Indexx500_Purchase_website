@@ -54,7 +54,7 @@ const CardComponent = ({ title, discount, unitPrice, progressBar }) => {
           <div>
             <p className="percentage">98%</p>
           </div>
-          <ProgressBar now={progressBar} className="progressBar" />
+          <ProgressBar now={progressBar} className="progressBar"  />
         </div>
       </Card.Body>
     </Card>

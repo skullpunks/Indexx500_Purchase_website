@@ -172,6 +172,10 @@
     height: 8px;
 }
 
+.progress-bar{
+    background-color: #1950d5
+}
+
 .percentage {
     text-align: right;
     margin-bottom: 0px !important;
