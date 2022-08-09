@@ -7,9 +7,7 @@ import { Coins } from "../utility/constant";
 import InputText from "../components/InputText";
 import { ethers } from "ethers";
 
-const BuyCoin = ({
-  signer
-}) => {
+const BuyCoin = ({ signer }) => {
   const [to, setTo] = useState(Coins[0]);
   const [from, setFrom] = useState({ label: "indexx500", icon: LogoIcon });
   const [token, setToken] = useState("");
@@ -855,7 +853,7 @@ const BuyCoin = ({
   const handlePayment = async (e) => {
     const tokenContract = e;
     setPayment(e.label);
-    setTo(e.label);
+    setTo(e);
     // await getAssignTokens();
     let addr = "";
     let tokenPrice = 0;
@@ -891,20 +889,18 @@ const BuyCoin = ({
     await spFeed.latestRoundData().then((roundData) => {
       spprice = roundData[1] / 10000000000;
       console.log("sp500 value: " + spprice);
+      let rate = inputtoken * (tokenPrice / spprice);
+      setToken(Math.round(rate * 100) / 100);
     });
-
-    let rate = inputtoken * (tokenPrice / spprice);
-    setToken(Math.round(rate * 100) / 100);
   };
 
   const payCrypto = async () => {
     try {
-      const ico_contract = new ethers.Contract(
-        icoAddress,
-        icoABI,
-        signer
-      );
+      const ico_contract = new ethers.Contract(icoAddress, icoABI, signer);
       let tx;
+
+      console.log("ico_contract", ico_contract);
+
       if (payment === "0x0000000000000000000000000000000000000000") {
         tx = await ico_contract.buyIndexxFromBNB(account, {
           value: ethers.utils.parseUnits(inputtoken, "ether"),
@@ -931,13 +927,11 @@ const BuyCoin = ({
       console.log(`payment`, payment);
       console.log(`paymentABI`, paymentABI);
       console.log(`signer`, signer);
-      const paymentContract = new ethers.Contract(
-        payment,
-        paymentABI,
-        signer
-      );
+      const paymentContract = new ethers.Contract(payment, paymentABI, signer);
 
       console.log(`paymentContract`, paymentContract);
+
+      console.log("inputtoken", inputtoken);
 
       const tx = await paymentContract.approve(
         "0x68A62a16d381fd8C11F092b3Eea68845C3Db721E",
@@ -1006,6 +1000,7 @@ const BuyCoin = ({
               id="inputBusd"
               value={token}
               aria-describedby="passwordHelpBlock"
+              disabled
             />
           </div>
         </div>
