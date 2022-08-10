@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -11,11 +9,8 @@ import WelcomeIcon from "../assets/icons/welcome-logo.svg";
 import Header from "../components/Header";
 import CardComponent from "../components/Card";
 import { providerOptions } from "../providerOptions";
-import { SetSignerInfo } from "../state/actions/user.action";
-import localforage from "localforage";
 import BuyCoin from "./BuyCoin";
 import moment from "moment";
-import { format } from "path-browserify";
 
 const web3Modal = new Web3Modal({
   cacheProvider: false, // optional
@@ -23,13 +18,10 @@ const web3Modal = new Web3Modal({
 });
 
 const Home = () => {
-  // const navigate = useNavigate();
-  // const dispatch = useDispatch();
   const [provider, setProvider] = useState();
   const [library, setLibrary] = useState();
   const [account, setAccount] = useState();
   const [chainId, setChainId] = useState();
-  const [error, setError] = useState("");
   const [sprice, setSprice] = useState("");
   const [signer, setSigner] = useState("");
   const [page, setPage] = useState("HOME");
@@ -101,41 +93,29 @@ const Home = () => {
           },
         ],
       });
-      // await asset.send('wallet_switchEthereumChain', [{ chainId: `0x61` }])
     } catch (switchError) {
       console.log(switchError);
     }
   };
 
   const connectWallet = async () => {
-    console.log("connect wallet");
     try {
-      console.log("inside try");
       const provider = await web3Modal.connect();
       const library = new ethers.providers.Web3Provider(provider);
       const accounts = await library.listAccounts();
       const network = await library.getNetwork();
-      console.log("accounts", accounts);
-      // console.log('provider',provider)
-      console.log("network", network);
       setProvider(provider);
       setLibrary(library);
       if (accounts) setAccount(accounts[0]);
       setChainId(network.chainId);
 
       const signer = library.getSigner();
-      // localforage.setItem("SIGNER", signer);
-      // dispatch(SetSignerInfo(signer));
       setSigner(signer);
       if (network.chainId !== 97) {
-        // alert("chain not 97");
         await selectNetwork(library.provider);
       }
       setPage("BUYCOIN");
-      // navigate("/buy-token");
-    } catch (error) {
-      setError(error);
-    }
+    } catch (error) {}
   };
 
   const indexPrice = async () => {
@@ -149,11 +129,11 @@ const Home = () => {
     await spFeed.latestRoundData().then((roundData) => {
       spprice = roundData[1] / 10000000000;
       spprice = Math.round(spprice * 100) / 100;
-      console.log("spprice", spprice);
       setSprice(spprice);
       return spprice;
     });
   };
+
   useEffect(() => {
     indexPrice();
   }, []);
@@ -311,9 +291,7 @@ const Home = () => {
           </div>
         </Container>
       )}
-      {page === "BUYCOIN" && (
-        <BuyCoin signer={signer} account={account} />
-      )}
+      {page === "BUYCOIN" && <BuyCoin signer={signer} account={account} />}
     </div>
   );
 };

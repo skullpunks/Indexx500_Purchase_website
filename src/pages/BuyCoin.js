@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Form } from "react-bootstrap";
 import Spinner from "react-bootstrap/Spinner";
-import Header from "../components/Header";
 import LogoIcon from "../assets/icons/logo.svg";
 import BottomArrow from "../assets/icons/bottom-arrow.svg";
 import { Coins, PaymentContract } from "../utility/constant";
@@ -10,20 +9,13 @@ import { ethers } from "ethers";
 import { toast } from "react-toastify";
 
 const BuyCoin = ({ signer, account }) => {
-  // const state = useSelector((state) => state.user);
-  // const { signer } = state;
-  // console.log('redux', state);
-
   const [to, setTo] = useState(Coins[0]);
   const [from, setFrom] = useState({ label: "indexx500", icon: LogoIcon });
   const [token, setToken] = useState("");
   const [payment, setPayment] = useState(PaymentContract["BUSD"]);
   const [inputtoken, setInputtoken] = useState("");
-  // const [signer, setSigner] = useState("");
-  const [error, setError] = useState("");
   const [buyNowBtn, setBuyNowBtn] = useState(false);
   const [loading, setLoading] = useState(false);
-  // const [account, setAccount] = useState();
 
   const chainlinkABI = [
     {
@@ -866,13 +858,11 @@ const BuyCoin = ({ signer, account }) => {
     setPayment(PaymentContract[e.label]);
 
     setTo(e);
-    // await getAssignTokens();
     let addr = "";
     let tokenPrice = 0;
     let spprice = 0;
     let spaddr = "0xb24D1DeE5F9a3f761D286B56d2bC44CE1D02DF7e";
 
-    // alert(payment);
     if (tokenContract.label === "BNB") {
       addr = "0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE";
     } else if (tokenContract.label === "BUSD") {
@@ -934,27 +924,17 @@ const BuyCoin = ({ signer, account }) => {
       toast.error(error?.data?.message, {
         position: toast.POSITION.TOP_RIGHT,
       });
-      setError(error);
     }
   };
 
   const approve = async () => {
     try {
-      console.log(`payment`, payment);
-      console.log(`paymentABI`, paymentABI);
-      console.log(`signer`, signer);
       const paymentContract = new ethers.Contract(payment, paymentABI, signer);
-
-      console.log(`paymentContract`, paymentContract);
-
-      console.log("inputtoken", inputtoken);
 
       const tx = await paymentContract.approve(
         "0x68A62a16d381fd8C11F092b3Eea68845C3Db721E",
         ethers.utils.parseUnits(inputtoken, "ether")
       );
-      console.log(`Transaction hash: ${tx.hash}`);
-
       const receipt = await tx.wait();
       setBuyNowBtn(true);
       console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
@@ -962,8 +942,6 @@ const BuyCoin = ({ signer, account }) => {
     } catch (error) {
       // TODO Error handle with toast message
       toast.error(error);
-      console.log("error", error);
-      setError(error);
     }
   };
 
