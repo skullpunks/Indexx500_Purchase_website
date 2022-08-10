@@ -890,6 +890,7 @@ export default function Home() {
 
   const handlePayment = async (e) => {
     const tokenContract = e.target.value;
+    console.log('tokenContract', tokenContract);
     setPayment(tokenContract);
     // await getAssignTokens();
     let addr = "";

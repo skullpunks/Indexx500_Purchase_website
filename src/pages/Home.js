@@ -297,7 +297,7 @@ const Home = () => {
         </Container>
       )}
       {page === "BUYCOIN" && (
-        <BuyCoin signer={signer} />
+        <BuyCoin signer={signer} account={account} />
       )}
     </div>
   );

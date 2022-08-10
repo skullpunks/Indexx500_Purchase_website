@@ -3,12 +3,12 @@ import { Form } from "react-bootstrap";
 import Header from "../components/Header";
 import LogoIcon from "../assets/icons/logo.svg";
 import BottomArrow from "../assets/icons/bottom-arrow.svg";
-import { Coins } from "../utility/constant";
+import { Coins, PaymentContract } from "../utility/constant";
 import InputText from "../components/InputText";
 import { ethers } from "ethers";
 import { useSelector } from "react-redux";
 
-const BuyCoin = ({ signer }) => {
+const BuyCoin = ({ signer, account }) => {
   // const state = useSelector((state) => state.user);
   // const { signer } = state;
   // console.log('redux', state);
@@ -16,11 +16,11 @@ const BuyCoin = ({ signer }) => {
   const [to, setTo] = useState(Coins[0]);
   const [from, setFrom] = useState({ label: "indexx500", icon: LogoIcon });
   const [token, setToken] = useState("");
-  const [payment, setPayment] = useState("BUSD");
+  const [payment, setPayment] = useState(PaymentContract["BUSD"]);
   const [inputtoken, setInputtoken] = useState("");
   // const [signer, setSigner] = useState("");
   const [error, setError] = useState("");
-  const [account, setAccount] = useState();
+  // const [account, setAccount] = useState();
 
   const chainlinkABI = [
     {
@@ -857,7 +857,8 @@ const BuyCoin = ({ signer }) => {
 
   const handlePayment = async (e) => {
     const tokenContract = e;
-    setPayment(e.label);
+    setPayment(PaymentContract[e.label]);
+
     setTo(e);
     // await getAssignTokens();
     let addr = "";
@@ -905,6 +906,9 @@ const BuyCoin = ({ signer }) => {
       let tx;
 
       console.log("ico_contract", ico_contract);
+      console.log("signer", signer);
+      console.log("payment", payment);
+      console.log("account", account);
 
       if (payment === "0x0000000000000000000000000000000000000000") {
         tx = await ico_contract.buyIndexxFromBNB(account, {
@@ -923,6 +927,7 @@ const BuyCoin = ({ signer }) => {
       console.log(`Transaction confirmed in block ${receipts.blockNumber}`);
       console.log(`Gas used: ${receipts.gasUsed.toString()}`);
     } catch (error) {
+      // TODO Error handle with toast message
       setError(error);
     }
   };
@@ -948,6 +953,8 @@ const BuyCoin = ({ signer }) => {
       console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
       console.log(`Gas used: ${receipt.gasUsed.toString()}`);
     } catch (error) {
+      // TODO Error handle with toast message
+      console.log('error', error);
       setError(error);
     }
   };
