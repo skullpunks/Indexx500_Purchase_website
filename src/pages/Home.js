@@ -121,7 +121,7 @@ const Home = () => {
       setChainId(network.chainId);
 
       const signer = library.getSigner();
-      localforage.setItem("SIGNER", signer);
+      // localforage.setItem("SIGNER", signer);
       // dispatch(SetSignerInfo(signer));
       setSigner(signer);
       if (network.chainId !== 97) {
