@@ -914,7 +914,6 @@ const BuyCoin = ({ signer, account }) => {
         );
       }
       console.log(`Transaction hash: ${tx.hash}`);
-
       const receipts = await tx.wait();
       console.log(`Transaction confirmed in block ${receipts.blockNumber}`);
       console.log(`Gas used: ${receipts.gasUsed.toString()}`);
@@ -935,8 +934,10 @@ const BuyCoin = ({ signer, account }) => {
         "0x68A62a16d381fd8C11F092b3Eea68845C3Db721E",
         ethers.utils.parseUnits(inputtoken, "ether")
       );
+      setLoading(true);
       const receipt = await tx.wait();
       setBuyNowBtn(true);
+      setLoading(false);
       console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
       console.log(`Gas used: ${receipt.gasUsed.toString()}`);
     } catch (error) {

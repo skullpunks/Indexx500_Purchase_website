@@ -21,7 +21,7 @@ const CardComponent = ({
     return moment().isAfter(edate);
   };
   return (
-    <Card className="supply-card">
+    <Card className={checkBetween(sdate, edate) ? "active-supply-card" : "supply-card"}>
       <Card.Body>
         <div className="price-info">
           <h5>
