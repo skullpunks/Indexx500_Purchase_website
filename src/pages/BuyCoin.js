@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Form } from "react-bootstrap";
+import Spinner from "react-bootstrap/Spinner";
 import Header from "../components/Header";
 import LogoIcon from "../assets/icons/logo.svg";
 import BottomArrow from "../assets/icons/bottom-arrow.svg";
 import { Coins, PaymentContract } from "../utility/constant";
 import InputText from "../components/InputText";
 import { ethers } from "ethers";
-import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const BuyCoin = ({ signer, account }) => {
   // const state = useSelector((state) => state.user);
@@ -20,6 +21,8 @@ const BuyCoin = ({ signer, account }) => {
   const [inputtoken, setInputtoken] = useState("");
   // const [signer, setSigner] = useState("");
   const [error, setError] = useState("");
+  const [buyNowBtn, setBuyNowBtn] = useState(false);
+  const [loading, setLoading] = useState(false);
   // const [account, setAccount] = useState();
 
   const chainlinkABI = [
@@ -812,7 +815,9 @@ const BuyCoin = ({ signer, account }) => {
     { anonymous: false, inputs: [], name: "Pause", type: "event" },
     { anonymous: false, inputs: [], name: "Unpause", type: "event" },
   ];
+
   const setInputValue = async (e) => {
+    setLoading(true);
     let inputs = e.target.value;
     setInputtoken(inputs);
     let addr = "";
@@ -849,13 +854,14 @@ const BuyCoin = ({ signer, account }) => {
     await spFeed.latestRoundData().then((roundData) => {
       spprice = roundData[1] / 10000000000;
       console.log("sp500 value: " + spprice);
+      let rate = inputs * (tokenPrice / spprice);
+      setToken(Math.round(rate * 100) / 100);
+      setLoading(false);
     });
-
-    let rate = inputs * (tokenPrice / spprice);
-    setToken(Math.round(rate * 100) / 100);
   };
 
   const handlePayment = async (e) => {
+    setLoading(true);
     const tokenContract = e;
     setPayment(PaymentContract[e.label]);
 
@@ -897,6 +903,7 @@ const BuyCoin = ({ signer, account }) => {
       console.log("sp500 value: " + spprice);
       let rate = inputtoken * (tokenPrice / spprice);
       setToken(Math.round(rate * 100) / 100);
+      setLoading(false);
     });
   };
 
@@ -904,11 +911,6 @@ const BuyCoin = ({ signer, account }) => {
     try {
       const ico_contract = new ethers.Contract(icoAddress, icoABI, signer);
       let tx;
-
-      console.log("ico_contract", ico_contract);
-      console.log("signer", signer);
-      console.log("payment", payment);
-      console.log("account", account);
 
       if (payment === "0x0000000000000000000000000000000000000000") {
         tx = await ico_contract.buyIndexxFromBNB(account, {
@@ -928,6 +930,9 @@ const BuyCoin = ({ signer, account }) => {
       console.log(`Gas used: ${receipts.gasUsed.toString()}`);
     } catch (error) {
       // TODO Error handle with toast message
+      toast.error(error?.data?.message, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
       setError(error);
     }
   };
@@ -950,11 +955,13 @@ const BuyCoin = ({ signer, account }) => {
       console.log(`Transaction hash: ${tx.hash}`);
 
       const receipt = await tx.wait();
+      setBuyNowBtn(true);
       console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
       console.log(`Gas used: ${receipt.gasUsed.toString()}`);
     } catch (error) {
       // TODO Error handle with toast message
-      console.log('error', error);
+      toast.error(error);
+      console.log("error", error);
       setError(error);
     }
   };
@@ -1016,13 +1023,13 @@ const BuyCoin = ({ signer, account }) => {
           </div>
         </div>
       </div>
-      {to.label === "BNB" || to.label === "Stripe" ? (
+      {to.label === "BNB" || to.label === "Stripe" || buyNowBtn ? (
         <div className="buy-now-btn" onClick={payCrypto}>
-          BUY
+          {loading ? <Spinner animation="border" variant="light" /> : `BUY`}
         </div>
       ) : (
         <div className="buy-now-btn" onClick={approve}>
-          APPROVE
+          {loading ? <Spinner animation="border" variant="light" /> : `APPROVE`}
         </div>
       )}
       <div>

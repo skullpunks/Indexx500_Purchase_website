@@ -11,18 +11,21 @@ import "./assets/style.css";
 import Home from "./pages/Home";
 import BuyCoin from "./pages/BuyCoin";
 import { store, persistor } from "./state";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 const Index = () => {
   return (
     <React.StrictMode>
+      <ToastContainer />
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <BrowserRouter>
             <Routes>
               <Route path="/*" element={<Home />} />
-              {/* <Route path="/buy-token" element={<BuyCoin />} /> */}
+              <Route path="/buy-token" element={<BuyCoin />} />
               <Route
                 path="/app"
                 element={
