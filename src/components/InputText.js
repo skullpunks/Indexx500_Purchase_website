@@ -23,6 +23,7 @@ const InputText = ({ value, icon, position, onChange,handleChange,inputtoken }) 
           >
             {Coins.map((coin, index) => (
               <div
+                key={index}
                 style={{
                   padding: "2px 8px",
                   borderBottom:
