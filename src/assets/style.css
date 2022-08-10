@@ -163,7 +163,9 @@
     font-size: 18px;
     font-weight: 400;
 }
-
+.price-info .active {
+    color: #1950d5;
+}
 .unitPrice {
     font-weight: 400;
 }

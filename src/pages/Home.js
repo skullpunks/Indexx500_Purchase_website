@@ -14,6 +14,9 @@ import { providerOptions } from "../providerOptions";
 import { SetSignerInfo } from "../state/actions/user.action";
 import localforage from "localforage";
 import BuyCoin from "./BuyCoin";
+import moment from "moment";
+import { format } from "path-browserify";
+
 const web3Modal = new Web3Modal({
   cacheProvider: false, // optional
   providerOptions, // required
@@ -246,7 +249,9 @@ const Home = () => {
                   title="PRO-ICO STAGE 1"
                   discount="15%"
                   unitPrice={sprice}
-                  progressBar={98}
+                  progressBar={0}
+                  sdate={moment("20220816")}
+                  edate={moment("20220830")}
                 />
               </Col>
               <Col xl={6} md={6}>
@@ -254,7 +259,9 @@ const Home = () => {
                   title="PRO-ICO STAGE 2"
                   discount="12%"
                   unitPrice={sprice}
-                  progressBar={89}
+                  progressBar={0}
+                  sdate={moment("20220901")}
+                  edate={moment("20220915")}
                 />
               </Col>
               <Col xl={6} md={6} style={{ marginTop: 25 }}>
@@ -262,7 +269,9 @@ const Home = () => {
                   title="PRO-ICO STAGE 3"
                   discount="9%"
                   unitPrice={sprice}
-                  progressBar={10}
+                  progressBar={0}
+                  sdate={moment("20220916")}
+                  edate={moment("20220930")}
                 />
               </Col>
               <Col xl={6} md={6} style={{ marginTop: 25 }}>
@@ -270,7 +279,9 @@ const Home = () => {
                   title="PRO-ICO STAGE 4"
                   discount="6%"
                   unitPrice={sprice}
-                  progressBar={10}
+                  progressBar={0}
+                  sdate={moment("20221001")}
+                  edate={moment("20221015")}
                 />
               </Col>
               <Col xl={6} md={6} style={{ marginTop: 25 }}>
@@ -278,7 +289,9 @@ const Home = () => {
                   title="PRO-ICO STAGE 5"
                   discount="3%"
                   unitPrice={sprice}
-                  progressBar={10}
+                  progressBar={0}
+                  sdate={moment("20221016")}
+                  edate={moment("20221030")}
                 />
               </Col>
               <Col xl={6} md={6} style={{ marginTop: 25 }}>
@@ -286,7 +299,9 @@ const Home = () => {
                   title="PRO-ICO STAGE 6"
                   discount="1%"
                   unitPrice={sprice}
-                  progressBar={10}
+                  progressBar={0}
+                  sdate={moment("20221101")}
+                  edate={moment("20221115")}
                 />
               </Col>
             </Row>

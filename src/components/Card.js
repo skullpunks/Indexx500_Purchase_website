@@ -3,14 +3,31 @@ import { ProgressBar } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import BUSDIcon from "../assets/icons/busd-icon.svg";
 import LogoIcon from "../assets/icons/logo.svg";
-
-const CardComponent = ({ title, discount, unitPrice, progressBar }) => {
+import moment from "moment";
+const CardComponent = ({
+  title,
+  discount,
+  unitPrice,
+  progressBar,
+  sdate,
+  edate,
+}) => {
+  function checkBetween(date2, date3) {
+    const check = moment().isBetween(date2, date3);
+    return check;
+  }
   return (
     <Card className="supply-card">
       <Card.Body>
         <div className="price-info">
+          <h5>
+            {`${sdate.format("D")}`}<sup>th</sup>&nbsp;
+            {sdate.format("MMMM")}
+            &nbsp;to {edate.format("D")}
+            <sup>th</sup> {edate.format("MMMM")} 2022
+          </h5>
           <h2 className="price-title">{title}</h2>
-          <h3>
+          <h3 className={checkBetween(sdate, edate) ? "active" : ""}>
             <span className="discount">DISCOUNT</span> {discount}
           </h3>
         </div>
@@ -52,9 +69,14 @@ const CardComponent = ({ title, discount, unitPrice, progressBar }) => {
         </div>
         <div>
           <div>
-            <p className="percentage">98%</p>
+            <p className="percentage">
+              {checkBetween(sdate, edate) ? "56%" : "0%"}
+            </p>
           </div>
-          <ProgressBar now={progressBar} className="progressBar"  />
+          <ProgressBar
+            now={!checkBetween(sdate, edate) ? progressBar : "56"}
+            className="progressBar"
+          />
         </div>
       </Card.Body>
     </Card>
