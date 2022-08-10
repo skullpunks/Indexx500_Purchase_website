@@ -820,13 +820,13 @@ const BuyCoin = ({ signer }) => {
     let spprice = 0;
     let spaddr = "0xb24D1DeE5F9a3f761D286B56d2bC44CE1D02DF7e";
 
-    if (payment.label === "BNB") {
+    if (payment === "BNB") {
       addr = "0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE";
-    } else if (payment.label === "BUSD") {
+    } else if (payment === "BUSD") {
       addr = "1";
-    } else if (payment.label === "WBTC") {
+    } else if (payment === "WBTC") {
       addr = "0x264990fbd0A4796A3E3d8E37C4d5F87a3aCa5Ebf";
-    } else if (payment.label === "WETH") {
+    } else if (payment === "WETH") {
       addr = "0x9ef1B8c0E4F7dc8bF5719Ea496883DC6401d5b2e";
     } else {
       addr = "1";
