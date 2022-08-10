@@ -928,6 +928,7 @@ const BuyCoin = ({ signer, account }) => {
       const receipts = await tx.wait();
       console.log(`Transaction confirmed in block ${receipts.blockNumber}`);
       console.log(`Gas used: ${receipts.gasUsed.toString()}`);
+      setBuyNowBtn(false);
     } catch (error) {
       // TODO Error handle with toast message
       toast.error(error?.data?.message, {
