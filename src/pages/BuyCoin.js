@@ -6,8 +6,13 @@ import BottomArrow from "../assets/icons/bottom-arrow.svg";
 import { Coins } from "../utility/constant";
 import InputText from "../components/InputText";
 import { ethers } from "ethers";
+import { useSelector } from "react-redux";
 
 const BuyCoin = ({ signer }) => {
+  // const state = useSelector((state) => state.user);
+  // const { signer } = state;
+  // console.log('redux', state);
+
   const [to, setTo] = useState(Coins[0]);
   const [from, setFrom] = useState({ label: "indexx500", icon: LogoIcon });
   const [token, setToken] = useState("");
@@ -949,7 +954,6 @@ const BuyCoin = ({ signer }) => {
 
   return (
     <div>
-      <Header />
       <div
         style={{
           width: "60%",
