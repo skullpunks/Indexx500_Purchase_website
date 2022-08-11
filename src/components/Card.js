@@ -21,17 +21,21 @@ const CardComponent = ({
     return moment().isAfter(edate);
   };
   return (
-    <Card className="supply-card">
+    <Card className={checkBetween(sdate, edate) ? "supply-card" : "non-supply-card"}>
       <Card.Body>
+        <Card.Header className="customCard">
+          <div className="card-header-color">
+            <h5>
+              {`${sdate.format("D")}`}
+              <sup>th</sup>&nbsp;
+              {sdate.format("MMMM")}
+              &nbsp;to {edate.format("D")}
+              <sup>th</sup> {edate.format("MMMM")} 2022
+            </h5>
+            <h2 className="price-title">{title}</h2>
+          </div>
+        </Card.Header>
         <div className="price-info">
-          <h5>
-            {`${sdate.format("D")}`}
-            <sup>th</sup>&nbsp;
-            {sdate.format("MMMM")}
-            &nbsp;to {edate.format("D")}
-            <sup>th</sup> {edate.format("MMMM")} 2022
-          </h5>
-          <h2 className="price-title">{title}</h2>
           <h3 className={checkBetween(sdate, edate) ? "active" : ""}>
             <span className="discount">DISCOUNT</span> {discount}
           </h3>
@@ -78,8 +82,8 @@ const CardComponent = ({
               {checkBetween(sdate, edate)
                 ? "56%"
                 : checkAfterDate(edate)
-                ? "89%"
-                : "0%"}
+                  ? "89%"
+                  : "0%"}
             </p>
           </div>
           <ProgressBar
@@ -87,8 +91,8 @@ const CardComponent = ({
               checkBetween(sdate, edate)
                 ? 56
                 : checkAfterDate(edate)
-                ? 89
-                : progressBar
+                  ? 89
+                  : progressBar
             }
             className="progressBar"
           />

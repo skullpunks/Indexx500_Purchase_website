@@ -879,7 +879,7 @@ export default function Home() {
       const signer = library.getSigner();
       setSigner(signer);
       alert(network.chainId);
-      if(network.chainId !== 97){
+      if (network.chainId !== 97) {
         alert("chain not 97");
         await selectNetwork(library.provider);
       }
@@ -1012,22 +1012,22 @@ export default function Home() {
     refreshState();
   };
 
-  const indexPrice = async() => {
+  const indexPrice = async () => {
 
     let spprice = 0;
     let spaddr = "0xb24D1DeE5F9a3f761D286B56d2bC44CE1D02DF7e";
     let rpcProvider = new ethers.providers.JsonRpcProvider(
       "https://bsc-dataseed1.binance.org/"
     );
-   console.log('rpcProvider',rpcProvider)
+    console.log('rpcProvider', rpcProvider)
     const spFeed = new ethers.Contract(spaddr, chainlinkABI, rpcProvider);
     await spFeed.latestRoundData().then((roundData) => {
       spprice = roundData[1] / 10000000000;
-      spprice =  Math.round(spprice * 100) / 100
+      spprice = Math.round(spprice * 100) / 100
       return spprice;
 
     });
-    console.log("spFeed",spFeed)
+    console.log("spFeed", spFeed)
   }
 
   useEffect(() => {

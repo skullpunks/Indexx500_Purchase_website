@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 const BuyCoin = ({ signer, account }) => {
   const [to, setTo] = useState(Coins[0]);
   const [from, setFrom] = useState({ label: "indexx500", icon: LogoIcon });
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState(0);
   const [payment, setPayment] = useState(PaymentContract["BUSD"]);
   const [inputtoken, setInputtoken] = useState("");
   const [buyNowBtn, setBuyNowBtn] = useState(false);
@@ -816,17 +816,15 @@ const BuyCoin = ({ signer, account }) => {
     let tokenPrice = 0;
     let spprice = 0;
     let spaddr = "0xb24D1DeE5F9a3f761D286B56d2bC44CE1D02DF7e";
-
-    if (payment === "BNB") {
+    if (payment === "0x0000000000000000000000000000000000000000") {
       addr = "0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE";
-    } else if (payment === "BUSD") {
+    } else if (payment === "0xFd6a8739Ce434f5cB52FB4d4E0DBeA4a9cB25532") {
       addr = "1";
-    } else if (payment === "WBTC") {
+    } else if (payment === "0xd15B482A08b44FA055Ad77dF5Cc99dae6E3A4184") {
       addr = "0x264990fbd0A4796A3E3d8E37C4d5F87a3aCa5Ebf";
-    } else if (payment === "WETH") {
+    } else if (payment === "0x9b9f1b34bC30e2789DB71eD18C749167880215Bd") {
       addr = "0x9ef1B8c0E4F7dc8bF5719Ea496883DC6401d5b2e";
     } else {
-      addr = "1";
       // stripe payment
     }
 
@@ -899,6 +897,7 @@ const BuyCoin = ({ signer, account }) => {
 
   const payCrypto = async () => {
     try {
+      setLoading(true);
       const ico_contract = new ethers.Contract(icoAddress, icoABI, signer);
       let tx;
 
@@ -919,18 +918,24 @@ const BuyCoin = ({ signer, account }) => {
       console.log(`Transaction confirmed in block ${receipts.blockNumber}`);
       console.log(`Gas used: ${receipts.gasUsed.toString()}`);
       setBuyNowBtn(false);
+      toast.success("Payment Successful");
+      setLoading(false);
     } catch (error) {
+      console.log('error', error)
       // TODO Error handle with toast message
-      toast.error(error?.data?.message, {
-        position: toast.POSITION.TOP_RIGHT,
-      });
+      if (error?.data?.message != undefined)
+        toast.error(error?.data?.message, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      toast.error("Transaction Failed. Please again later!");
+      setLoading(false);
     }
   };
 
   const approve = async () => {
     try {
+      setLoading(true);
       const paymentContract = new ethers.Contract(payment, paymentABI, signer);
-
       const tx = await paymentContract.approve(
         "0x68A62a16d381fd8C11F092b3Eea68845C3Db721E",
         ethers.utils.parseUnits(inputtoken, "ether")
@@ -939,9 +944,13 @@ const BuyCoin = ({ signer, account }) => {
       setBuyNowBtn(true);
       console.log(`Transaction confirmed in block ${receipt.blockNumber}`);
       console.log(`Gas used: ${receipt.gasUsed.toString()}`);
+      toast.success("Approved");
+      setLoading(false);
     } catch (error) {
       // TODO Error handle with toast message
       toast.error(error);
+      setLoading(false);
+
     }
   };
 
@@ -955,11 +964,14 @@ const BuyCoin = ({ signer, account }) => {
           marginTop: 20,
         }}
       >
-        <img
-          src={LogoIcon}
-          style={{ width: 64, height: 64 }}
-          alt="indexx logo"
-        />
+        <figure>
+          <img
+            src={LogoIcon}
+            style={{ width: 64, height: 64 }}
+            alt="indexx logo"
+          />
+          <figcaption style={{ color: "#0052CC", fontSize: "larger", fontWeight: "bold" }}>indexx500</figcaption>
+        </figure>
         <h3 style={{ marginTop: 20, color: "#808080", marginBottom: 0 }}>
           SWAP
         </h3>

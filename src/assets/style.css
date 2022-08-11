@@ -147,6 +147,10 @@
 }
 
 .supply-card {
+    border: 1px solid #0052CC;
+}
+
+.non-supply-card {
     border: 1px solid #6ce0ff;
 }
 
@@ -239,4 +243,14 @@
     color: #808080;
     width: 20%;
     margin: auto;
+}
+
+.customCard {
+    background: #0052CC;
+}
+
+.card-header-color {
+    color: #ffffff;
+    text-align: center;
+    font-weight: 400;
 }
