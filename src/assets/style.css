@@ -154,6 +154,10 @@
     border: 1px solid #6ce0ff;
 }
 
+.active-supply-card {
+    border: 1px solid #1950d5;
+}
+
 .price-info h2 {
     color: #808080;
     margin-bottom: 0px !important;

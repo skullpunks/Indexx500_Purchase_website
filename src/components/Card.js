@@ -21,7 +21,7 @@ const CardComponent = ({
     return moment().isAfter(edate);
   };
   return (
-    <Card className={checkBetween(sdate, edate) ? "supply-card" : "non-supply-card"}>
+    <Card className={checkBetween(sdate, edate) ? "active-supply-card" : "supply-card"}>
       <Card.Body>
         <Card.Header className="customCard">
           <div className="card-header-color">
