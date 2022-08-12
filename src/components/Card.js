@@ -23,7 +23,7 @@ const CardComponent = ({
   return (
     <Card className={checkBetween(sdate, edate) ? "active-supply-card" : "non-active-supply-card"}>
       <Card.Body>
-        <Card.Header className="customCard">
+        <Card.Header className={checkBetween(sdate, edate) ? "customCard card-header-active" : "supply-card card-header-inactive"}>
           <div className="card-header-color">
             <h5>
               {`${sdate.format("D")}`}

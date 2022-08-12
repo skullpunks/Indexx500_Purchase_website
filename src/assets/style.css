@@ -254,7 +254,14 @@
 }
 
 .card-header-color {
-    color: #ffffff;
     text-align: center;
     font-weight: 400;
+}
+
+.card-header-inactive {
+    color: #808080;
+}
+
+.card-header-active {
+    color: #ffffff;
 }
