@@ -17,6 +17,11 @@ const BuyCoin = ({ signer, account }) => {
   const [buyNowBtn, setBuyNowBtn] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const sp500ChainlinkAddress = "0xb24D1DeE5F9a3f761D286B56d2bC44CE1D02DF7e";
+  const bnbChainlinkAddress = "0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE";
+  const wbtcChainlinkAddress = "0x264990fbd0A4796A3E3d8E37C4d5F87a3aCa5Ebf";
+  const wethChainlinkAddress = "0x9ef1B8c0E4F7dc8bF5719Ea496883DC6401d5b2e";
+
   const chainlinkABI = [
     {
       inputs: [],
@@ -815,17 +820,17 @@ const BuyCoin = ({ signer, account }) => {
     let addr = "";
     let tokenPrice = 0;
     let spprice = 0;
-    let spaddr = "0xb24D1DeE5F9a3f761D286B56d2bC44CE1D02DF7e";
-    if (payment === "0x0000000000000000000000000000000000000000") {
-      addr = "0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE";
-    } else if (payment === "0xFd6a8739Ce434f5cB52FB4d4E0DBeA4a9cB25532") {
+    let spaddr = sp500ChainlinkAddress;
+    if (payment === PaymentContract["BNB"]) {
+      addr = bnbChainlinkAddress;
+    } else if (payment === PaymentContract["BUSD"]) {
       addr = "1";
-    } else if (payment === "0xd15B482A08b44FA055Ad77dF5Cc99dae6E3A4184") {
-      addr = "0x264990fbd0A4796A3E3d8E37C4d5F87a3aCa5Ebf";
-    } else if (payment === "0x9b9f1b34bC30e2789DB71eD18C749167880215Bd") {
-      addr = "0x9ef1B8c0E4F7dc8bF5719Ea496883DC6401d5b2e";
+    } else if (payment === PaymentContract["WBTC"]) {
+      addr = wbtcChainlinkAddress;
+    } else if (payment === PaymentContract["WETH"]) {
+      addr = wethChainlinkAddress;
     } else {
-      // stripe payment
+      addr = "1";
     }
 
     let rpcProvider = new ethers.providers.JsonRpcProvider(
@@ -856,21 +861,21 @@ const BuyCoin = ({ signer, account }) => {
     setPayment(PaymentContract[e.label]);
 
     setTo(e);
-    let addr = "";
+    let addr = "";   // Chainlink addresses
     let tokenPrice = 0;
     let spprice = 0;
-    let spaddr = "0xb24D1DeE5F9a3f761D286B56d2bC44CE1D02DF7e";
+    let spaddr = sp500ChainlinkAddress;
 
     if (tokenContract.label === "BNB") {
-      addr = "0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE";
+      addr = bnbChainlinkAddress;
     } else if (tokenContract.label === "BUSD") {
       addr = "1";
     } else if (tokenContract.label === "WBTC") {
-      addr = "0x264990fbd0A4796A3E3d8E37C4d5F87a3aCa5Ebf";
+      addr = wbtcChainlinkAddress;
     } else if (tokenContract.label === "WETH") {
-      addr = "0x9ef1B8c0E4F7dc8bF5719Ea496883DC6401d5b2e";
+      addr = wethChainlinkAddress;
     } else {
-      // stripe payment
+      addr = "1";
     }
 
     let rpcProvider = new ethers.providers.JsonRpcProvider(
@@ -900,12 +905,13 @@ const BuyCoin = ({ signer, account }) => {
       setLoading(true);
       const ico_contract = new ethers.Contract(icoAddress, icoABI, signer);
       let tx;
-
-      if (payment === "0x0000000000000000000000000000000000000000") {
+      if (payment === PaymentContract["BNB"]) {
         tx = await ico_contract.buyIndexxFromBNB(account, {
           value: ethers.utils.parseUnits(inputtoken, "ether"),
         });
-      } else if (payment !== "") {
+      } else if (payment === "stripe") {
+        window.location.href = "https://buy.stripe.com/test_8wMg0q9pUdDPaaY7ss";
+      }else if (payment !== "") {
         tx = await ico_contract.buyIndexxFromAnyBEP20(
           account,
           ethers.utils.parseUnits(inputtoken, "ether"),
@@ -926,7 +932,9 @@ const BuyCoin = ({ signer, account }) => {
         toast.error(error?.data?.message, {
           position: toast.POSITION.TOP_RIGHT,
         });
+        if (payment !== "stripe"){
       toast.error("Transaction Failed. Please again later!");
+        }
       setLoading(false);
     }
   };
@@ -936,7 +944,7 @@ const BuyCoin = ({ signer, account }) => {
       setLoading(true);
       const paymentContract = new ethers.Contract(payment, paymentABI, signer);
       const tx = await paymentContract.approve(
-        "0x68A62a16d381fd8C11F092b3Eea68845C3Db721E",
+        icoAddress,
         ethers.utils.parseUnits(inputtoken, "ether")
       );
       setLoading(true);
@@ -1026,7 +1034,7 @@ const BuyCoin = ({ signer, account }) => {
       )}
       <div>
         <p className="guide-lines text-center">
-          Payment bought with discount will be released as per time lock
+          Tokens bought with discount will be released as per time lock
           schedule with KYC guidelines
         </p>
       </div>
