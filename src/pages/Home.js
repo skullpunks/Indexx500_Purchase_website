@@ -115,7 +115,7 @@ const Home = () => {
         await selectNetwork(library.provider);
       }
       setPage("BUYCOIN");
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const indexPrice = async () => {
@@ -149,11 +149,31 @@ const Home = () => {
             time frame and discount, do not miss!
           </p>
           <div className="text-center">
-            <img
+
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <Col xl={6} md={6}>
+                <CardComponent
+                  title="PRO-ICO STAGE 1"
+                  discount="15%"
+                  unitPrice={sprice}
+                  progressBar={0}
+                  sdate={moment("20220801")}
+                  edate={moment("20220831")}
+                />
+              </Col>
+            </div>
+
+            {/* <img
               src={WelcomeIcon}
               alt="welcome-icon"
               className="welcome-icon"
-            />
+            /> */}
+
+            <div className="walletBtn-connect" onClick={() => connectWallet()}>
+              BUY NOW
+            </div>
+
+
           </div>
           <div className="">
             <h2 className="instructions">Instructions</h2>
@@ -164,8 +184,7 @@ const Home = () => {
                 <Card className="instruction-card">
                   <Card.Text className="instruction-card-number">1</Card.Text>
                   <Card.Text className="instruction-card-details">
-                    Click Buy Token and connect Metamask wallet + Coinbase
-                    wallet
+                    Click BUY NOW and link Metamask or Coinbase wallet on Binance Smart Chain
                   </Card.Text>
                 </Card>
               </Col>
@@ -173,8 +192,8 @@ const Home = () => {
                 <Card className="instruction-card">
                   <Card.Text className="instruction-card-number">2</Card.Text>
                   <Card.Text className="instruction-card-details">
-                    Buy tokens with one of the following: <br />
-                    BUSD / BNB / WBTC / WETH / Stripe
+                    Buy tokens with any one of the following:
+                    BUSD / BNB / WBTC / WETH / STRIPE
                   </Card.Text>
                 </Card>
               </Col>
@@ -182,7 +201,7 @@ const Home = () => {
                 <Card className="instruction-card">
                   <Card.Text className="instruction-card-number">3</Card.Text>
                   <Card.Text className="instruction-card-details">
-                    Token price is set according to live S&P500 price
+                    Token amount is calculated according to LIVE S&P500 Index price
                   </Card.Text>
                 </Card>
               </Col>
@@ -190,8 +209,7 @@ const Home = () => {
                 <Card className="instruction-card">
                   <Card.Text className="instruction-card-number">4</Card.Text>
                   <Card.Text className="instruction-card-details">
-                    Added Discount tokens will be transferred to the same wallet
-                    and locked
+                    Approve your tokens to allow access to ICO contract and PAY
                   </Card.Text>
                 </Card>
               </Col>
@@ -199,8 +217,7 @@ const Home = () => {
                 <Card className="instruction-card">
                   <Card.Text className="instruction-card-number">5</Card.Text>
                   <Card.Text className="instruction-card-details">
-                    Token assigned to the wallet and locked in the time lock
-                    contract
+                    Tokens are assigned to the wallet and locked in the vesting schedule
                   </Card.Text>
                 </Card>
               </Col>
@@ -208,8 +225,7 @@ const Home = () => {
                 <Card className="instruction-card">
                   <Card.Text className="instruction-card-number">6</Card.Text>
                   <Card.Text className="instruction-card-details">
-                    Added Discount tokens will be transferred to the same wallet
-                    and locked
+                    Added Discount tokens will be transferred to the same wallet instantly
                   </Card.Text>
                 </Card>
               </Col>
@@ -217,8 +233,8 @@ const Home = () => {
           </div>
           <div className="curculating">
             <h2>
-              <span className="supply">CIRCULATING SUPPLY:</span>{" "}
-              <span className="price">199,999,999,999</span>
+              <span className="supply">TOTAL PRE-ICO SUPPLY:</span>{" "}
+              <span className="price">150,000</span>
             </h2>
           </div>
 
@@ -230,8 +246,8 @@ const Home = () => {
                   discount="15%"
                   unitPrice={sprice}
                   progressBar={0}
-                  sdate={moment("20220816")}
-                  edate={moment("20220830")}
+                  sdate={moment("20220815")}
+                  edate={moment("20220831")}
                 />
               </Col>
               <Col xl={6} md={6}>
@@ -271,7 +287,7 @@ const Home = () => {
                   unitPrice={sprice}
                   progressBar={0}
                   sdate={moment("20221016")}
-                  edate={moment("20221030")}
+                  edate={moment("20221031")}
                 />
               </Col>
               <Col xl={6} md={6} style={{ marginTop: 25 }}>
@@ -286,9 +302,9 @@ const Home = () => {
               </Col>
             </Row>
           </div>
-          <div className="walletBtn-connect" onClick={() => connectWallet()}>
+          {/* <div className="walletBtn-connect" onClick={() => connectWallet()}>
             CONNECT WALLET
-          </div>
+          </div> */}
         </Container>
       )}
       {page === "BUYCOIN" && <BuyCoin signer={signer} account={account} />}

@@ -1009,7 +1009,8 @@ const BuyCoin = ({ signer, account }) => {
               style={{ height: 32, width: 32, margin: "auto" }}
             />
             <span style={{ fontSize: 10, margin: 0, color: "#808080" }}>
-              {from.label}
+              {/* {from.label} */}
+              indexx
             </span>
           </div>
           <div>
