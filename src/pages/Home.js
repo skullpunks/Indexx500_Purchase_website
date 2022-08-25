@@ -7,6 +7,7 @@ import Web3Modal from "web3modal";
 import { ethers } from "ethers";
 import WelcomeIcon from "../assets/icons/welcome-logo.svg";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 import CardComponent from "../components/Card";
 import { providerOptions } from "../providerOptions";
 import BuyCoin from "./BuyCoin";
@@ -22,6 +23,7 @@ const Home = () => {
   const [library, setLibrary] = useState();
   const [account, setAccount] = useState();
   const [chainId, setChainId] = useState();
+  const [networkName, setNetworkName] = useState();
   const [sprice, setSprice] = useState("");
   const [signer, setSigner] = useState("");
   const [page, setPage] = useState("HOME");
@@ -82,17 +84,25 @@ const Home = () => {
         method: "wallet_addEthereumChain",
         params: [
           {
-            chainId: "0x61",
-            chainName: "BSC Testnet",
-            rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545"],
-            blockExplorerUrls: ["https://explorer.binance.org/smart-testnet"],
+            chainId: "0x38",
+            chainName: "BSC Mainnet",
+            rpcUrls: ["https://bsc-dataseed1.binance.org/"],
+            blockExplorerUrls: ["https://bscscan.com"],
             nativeCurrency: {
               symbol: "BNB",
               decimals: 18,
             },
           },
         ],
+      }).then((result) => {
+        // console.log(asset);
+        // console.log(asset[1]);
+        // console.log(asset.networkVersion);
+        // if(asset.networkVersion === 56){
+        setPage("BUYCOIN");
+        // }
       });
+    
     } catch (switchError) {
       console.log(switchError);
     }
@@ -100,22 +110,35 @@ const Home = () => {
 
   const connectWallet = async () => {
     try {
-      const provider = await web3Modal.connect();
-      const library = new ethers.providers.Web3Provider(provider);
-      const accounts = await library.listAccounts();
-      const network = await library.getNetwork();
+      let provider = await web3Modal.connect();
+      let library = new ethers.providers.Web3Provider(provider);
+      let accounts = await library.listAccounts();
+     
       setProvider(provider);
       setLibrary(library);
       if (accounts) setAccount(accounts[0]);
-      setChainId(network.chainId);
 
       const signer = library.getSigner();
       setSigner(signer);
-      if (network.chainId !== 97) {
+      let network = await library.getNetwork();
+      setNetworkName(network.name);
+      setChainId(network.chainId);
+
+      if (network.chainId !== 56) {
         await selectNetwork(library.provider);
+      }else{
+        setPage("BUYCOIN");
       }
-      setPage("BUYCOIN");
-    } catch (error) { }
+     
+    } catch (error) {
+      if (window.confirm(' Please Install Metamask wallet to participate in PRE-ICO ')) {
+        window.open(
+          'https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en',
+          '_blank'
+        );
+      };
+
+    }
   };
 
   const indexPrice = async () => {
@@ -156,8 +179,8 @@ const Home = () => {
                   discount="15%"
                   unitPrice={sprice}
                   progressBar={0}
-                  sdate={moment("20220801")}
-                  edate={moment("20220831")}
+                  sdate={moment("20220815")}
+                  edate={moment("20220915")}
                 />
               </Col>
             </div>
@@ -246,7 +269,7 @@ const Home = () => {
                   unitPrice={sprice}
                   progressBar={0}
                   sdate={moment("20220815")}
-                  edate={moment("20220831")}
+                  edate={moment("20220915")}
                 />
               </Col>
               <Col xl={6} md={6}>
@@ -255,8 +278,8 @@ const Home = () => {
                   discount="12%"
                   unitPrice={sprice}
                   progressBar={0}
-                  sdate={moment("20220901")}
-                  edate={moment("20220915")}
+                  sdate={moment("20220916")}
+                  edate={moment("20220930")}
                 />
               </Col>
               <Col xl={6} md={6} style={{ marginTop: 25 }}>
@@ -265,8 +288,8 @@ const Home = () => {
                   discount="9%"
                   unitPrice={sprice}
                   progressBar={0}
-                  sdate={moment("20220916")}
-                  edate={moment("20220930")}
+                  sdate={moment("20221001")}
+                  edate={moment("20221015")}
                 />
               </Col>
               <Col xl={6} md={6} style={{ marginTop: 25 }}>
@@ -275,8 +298,8 @@ const Home = () => {
                   discount="6%"
                   unitPrice={sprice}
                   progressBar={0}
-                  sdate={moment("20221001")}
-                  edate={moment("20221015")}
+                  sdate={moment("20221016")}
+                  edate={moment("20221031")}
                 />
               </Col>
               <Col xl={6} md={6} style={{ marginTop: 25 }}>
@@ -285,8 +308,8 @@ const Home = () => {
                   discount="3%"
                   unitPrice={sprice}
                   progressBar={0}
-                  sdate={moment("20221016")}
-                  edate={moment("20221031")}
+                  sdate={moment("20221101")}
+                  edate={moment("20221115")}
                 />
               </Col>
               <Col xl={6} md={6} style={{ marginTop: 25 }}>
@@ -295,8 +318,8 @@ const Home = () => {
                   discount="1%"
                   unitPrice={sprice}
                   progressBar={0}
-                  sdate={moment("20221101")}
-                  edate={moment("20221115")}
+                  sdate={moment("20221116")}
+                  edate={moment("20221130")}
                 />
               </Col>
             </Row>
@@ -304,9 +327,14 @@ const Home = () => {
           {/* <div className="walletBtn-connect" onClick={() => connectWallet()}>
             CONNECT WALLET
           </div> */}
+           
         </Container>
+        
       )}
-      {page === "BUYCOIN" && <BuyCoin signer={signer} account={account} />}
+      
+      {page === "BUYCOIN" && <BuyCoin signer={signer} account={account} networkName={networkName} />}
+      <br></br><br></br><br></br><br></br>
+      <Footer />
     </div>
   );
 };

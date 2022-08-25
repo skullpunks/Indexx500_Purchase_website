@@ -3,12 +3,13 @@ import { Form } from "react-bootstrap";
 import Spinner from "react-bootstrap/Spinner";
 import LogoIcon from "../assets/icons/logo.svg";
 import BottomArrow from "../assets/icons/bottom-arrow.svg";
-import { Coins, PaymentContract } from "../utility/constant";
+import { Coins, PaymentContract, truncateAddress } from "../utility/constant";
 import InputText from "../components/InputText";
 import { ethers } from "ethers";
 import { toast } from "react-toastify";
 
-const BuyCoin = ({ signer, account }) => {
+
+const BuyCoin = ({ signer, account, networkName }) => {
   const [to, setTo] = useState(Coins[0]);
   const [from, setFrom] = useState({ label: "indexx500", icon: LogoIcon });
   const [token, setToken] = useState(0);
@@ -21,7 +22,7 @@ const BuyCoin = ({ signer, account }) => {
   const bnbChainlinkAddress = "0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE";
   const wbtcChainlinkAddress = "0x264990fbd0A4796A3E3d8E37C4d5F87a3aCa5Ebf";
   const wethChainlinkAddress = "0x9ef1B8c0E4F7dc8bF5719Ea496883DC6401d5b2e";
-  const icoAddress = "0xe72A37FFB0C67E7A0a51A5F3F396864e7018E54B";
+  const icoAddress = "0x8bA9A63cac81B09509360d0A027dCE14F90F6779";
 
   const chainlinkABI = [
     {
@@ -75,43 +76,7 @@ const BuyCoin = ({ signer, account }) => {
 
   const icoABI = [
     {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_reserveWallet",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "_token",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "_timelockContract",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_openingTime",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_closingTime",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_investorMinCap",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_discount",
-          "type": "uint256"
-        }
-      ],
+      "inputs": [],
       "stateMutability": "nonpayable",
       "type": "constructor"
     },
@@ -129,6 +94,12 @@ const BuyCoin = ({ signer, account }) => {
           "internalType": "address",
           "name": "token",
           "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
         },
         {
           "indexed": false,
@@ -844,7 +815,11 @@ const BuyCoin = ({ signer, account }) => {
       spprice = roundData[1] / 10000000000;
       console.log("sp500 value: " + spprice);
       let rate = inputs * (tokenPrice / spprice);
-      setToken(Math.round(rate * 100) / 100);
+      let inputss = Math.round(rate * 100) / 100;
+      if(inputss < 1){
+        toast.error("Minimum Purchase 1 Indexx Token");
+      }
+      setToken(inputss);
       setLoading(false);
     });
   };
@@ -889,7 +864,12 @@ const BuyCoin = ({ signer, account }) => {
       spprice = roundData[1] / 10000000000;
       console.log("sp500 value: " + spprice);
       let rate = inputtoken * (tokenPrice / spprice);
-      setToken(Math.round(rate * 100) / 100);
+      let inputss = Math.round(rate * 100) / 100;
+      if(inputss < 1){
+        toast.error("Minimum Purchase 1 Indexx Token");
+      }
+      setToken(inputss);
+
       setLoading(false);
     });
   };
@@ -904,7 +884,9 @@ const BuyCoin = ({ signer, account }) => {
           value: ethers.utils.parseUnits(inputtoken, "ether"),
         });
       } else if (payment === "stripe") {
-        window.location.href = "https://buy.stripe.com/test_8wMg0q9pUdDPaaY7ss";
+        window.open(
+          'https://buy.stripe.com/9AQ8xxdS8f43gCI9AA'
+        );
       }else if (payment !== "") {
         tx = await ico_contract.buyIndexxFromAnyBEP20(
           account,
@@ -919,6 +901,8 @@ const BuyCoin = ({ signer, account }) => {
       setBuyNowBtn(false);
       toast.success("Payment Successful");
       setLoading(false);
+      window.location.href = "https://www.indexx.ai/aboute5e75cc8";
+
     } catch (error) {
       console.log('error', error)
       // TODO Error handle with toast message
@@ -935,6 +919,7 @@ const BuyCoin = ({ signer, account }) => {
 
   const approve = async () => {
     try {
+      alert(" Approve by scrolling down and confirm the transaction");
       setLoading(true);
       const paymentContract = new ethers.Contract(payment, paymentABI, signer);
       const tx = await paymentContract.approve(
@@ -973,12 +958,14 @@ const BuyCoin = ({ signer, account }) => {
             style={{ width: 64, height: 64 }}
             alt="indexx logo"
           />
-          <figcaption style={{ color: "#0052CC", fontSize: "larger", fontWeight: "bold" }}>indexx500</figcaption>
+          <figcaption style={{ color: "#0179fa", fontSize: "larger", fontWeight: "bold" }}>indexx500</figcaption>
         </figure>
-        <h3 style={{ marginTop: 20, color: "#808080", marginBottom: 0 }}>
+        <h3 style={{ marginTop: 20, color: "#0179fa", marginBottom: 0 }}>
           SWAP
         </h3>
-        <p style={{ color: "#808080" }}>Trade token in an instant</p>
+        <p style={{ color: "#0179fa" }}>Trade token in an instant</p>
+        <p style={{ color: "#0179fa" }}>{`Account: ${truncateAddress(account)}`}({networkName})</p>
+       
         <InputText
           icon={to.icon}
           value={to.label}
@@ -1033,6 +1020,7 @@ const BuyCoin = ({ signer, account }) => {
           schedule with KYC guidelines
         </p>
       </div>
+      <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
     </div>
   );
 };
