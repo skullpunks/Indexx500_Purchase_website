@@ -970,12 +970,15 @@ const BuyCoin = ({ signer, account, networkName }) => {
         <p style={{ color: "#0179fa" }}>Trade token in an instant</p>
         <p style={{ color: "#0179fa" }}>{`Account: ${truncateAddress(account)}`}({networkName})</p>
 
-        { networkName !== "bncb" && <p className="warningBar">WRONG NETWORK !!!</p>}
+        { networkName !== "bnb" &&
+            <div className="warningBarContainer">
+                <p className="warningBar">Wrong Network! Please switch to BSC Smart Chain and refresh the page</p>
+            </div>}
 
         <p style={{ color: "#0179fa" }}>Choose Payment Token</p>
 
         <TokenButton selectedToken={to} onChange={(coin) => handlePayment(coin)}/>
-       
+
         <InputText
           icon={to.icon}
           value={to.label}

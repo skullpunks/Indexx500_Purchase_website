@@ -539,11 +539,17 @@ div[role='menu'].visible {
   }
 
 .warningBar {
-    width: 300px;
-    margin-left: auto;
-    margin-right: auto;
     padding: 10px;
-    background: #F67280;
-    color: white;
+    background: #fffbe6;
     border-radius: 10px;
+    align-items: flex-start;
+    border: 1px solid #ffe58f;
+    font-size: 14px;
+    width: fit-content;
+}
+
+.warningBarContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
