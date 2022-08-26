@@ -1,6 +1,6 @@
-
-
-
+.Toastify__toast-container--bottom-center {
+    bottom: 4em !important;
+}
 
 
 .main-header {
@@ -538,4 +538,12 @@ div[role='menu'].visible {
       text-align: center;
   }
 
-
+.warningBar {
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+    background: #F67280;
+    color: white;
+    border-radius: 10px;
+}

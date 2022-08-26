@@ -7,6 +7,7 @@ import { Coins, PaymentContract, truncateAddress } from "../utility/constant";
 import InputText from "../components/InputText";
 import { ethers } from "ethers";
 import { toast } from "react-toastify";
+import TokenButton from "../components/TokenButton/TokenButton";
 
 
 const BuyCoin = ({ signer, account, networkName }) => {
@@ -816,9 +817,6 @@ const BuyCoin = ({ signer, account, networkName }) => {
       console.log("sp500 value: " + spprice);
       let rate = inputs * (tokenPrice / spprice);
       let inputss = Math.round(rate * 100) / 100;
-      if(inputss < 1){
-        toast.error("Minimum Purchase 1 Indexx Token");
-      }
       setToken(inputss);
       setLoading(false);
     });
@@ -865,16 +863,17 @@ const BuyCoin = ({ signer, account, networkName }) => {
       console.log("sp500 value: " + spprice);
       let rate = inputtoken * (tokenPrice / spprice);
       let inputss = Math.round(rate * 100) / 100;
-      if(inputss < 1){
-        toast.error("Minimum Purchase 1 Indexx Token");
-      }
       setToken(inputss);
-
       setLoading(false);
     });
   };
 
   const payCrypto = async () => {
+    if(token < 1) {
+      toast.error("Minimum Purchase 1 Indexx Token");
+      return
+    }
+
     try {
       setLoading(true);
       const ico_contract = new ethers.Contract(icoAddress, icoABI, signer);
@@ -918,6 +917,11 @@ const BuyCoin = ({ signer, account, networkName }) => {
   };
 
   const approve = async () => {
+    if(token < 1) {
+      toast.error("Minimum Purchase 1 Indexx Token");
+      return
+    }
+
     try {
       alert(" Approve by scrolling down and confirm the transaction");
       setLoading(true);
@@ -965,6 +969,12 @@ const BuyCoin = ({ signer, account, networkName }) => {
         </h3>
         <p style={{ color: "#0179fa" }}>Trade token in an instant</p>
         <p style={{ color: "#0179fa" }}>{`Account: ${truncateAddress(account)}`}({networkName})</p>
+
+        { networkName !== "bncb" && <p className="warningBar">WRONG NETWORK !!!</p>}
+
+        <p style={{ color: "#0179fa" }}>Choose Payment Token</p>
+
+        <TokenButton selectedToken={to} onChange={(coin) => handlePayment(coin)}/>
        
         <InputText
           icon={to.icon}
