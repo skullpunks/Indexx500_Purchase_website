@@ -7,7 +7,7 @@
     <list default="true" id="368bc2fa-1af7-4cac-b121-f518cbc8c9eb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/assets/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/BuyCoin.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/BuyCoin.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Home.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +59,7 @@
       <updated>1661445561630</updated>
       <workItem from="1661445564410" duration="5805000" />
       <workItem from="1661518415836" duration="665000" />
-      <workItem from="1661519273456" duration="3460000" />
+      <workItem from="1661519273456" duration="5117000" />
     </task>
     <servers />
   </component>

@@ -553,3 +553,16 @@ div[role='menu'].visible {
     align-items: center;
     justify-content: center;
 }
+
+.informationCard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+
+.link {
+    text-decoration: none;
+    padding: 10px;
+}

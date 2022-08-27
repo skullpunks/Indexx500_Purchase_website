@@ -206,7 +206,8 @@ const Home = () => {
                 <Card className="instruction-card">
                   <Card.Text className="instruction-card-number">1</Card.Text>
                   <Card.Text className="instruction-card-details">
-                    Click BUY NOW and link Metamask or Coinbase wallet on Binance Smart Chain
+                    Click BUY NOW and link Metamask or Coinbase wallet: <br></br>
+                    Make sure you are on Binance Smart Chain Network
                   </Card.Text>
                 </Card>
               </Col>
@@ -214,8 +215,8 @@ const Home = () => {
                 <Card className="instruction-card">
                   <Card.Text className="instruction-card-number">2</Card.Text>
                   <Card.Text className="instruction-card-details">
-                    Buy tokens with any one of the following:
-                    BUSD / BNB / WBTC / WETH / STRIPE
+                    Payment Options: BUSD / BNB / WBTC / WETH / STRIPE <br></br>
+                    Only Wrapped Bitcoin and Ethereum allowed which is on Binance Chain
                   </Card.Text>
                 </Card>
               </Col>
@@ -231,16 +232,24 @@ const Home = () => {
                 <Card className="instruction-card">
                   <Card.Text className="instruction-card-number">4</Card.Text>
                   <Card.Text className="instruction-card-details">
-                    Approve your tokens to allow access to ICO contract and PAY
+                    Approve your tokens to allow access to ICO contract  <br></br>
+                    Scroll down on Metamask page to confirm approval
                   </Card.Text>
                 </Card>
               </Col>
               <Col xs={6}>
                 <Card className="instruction-card">
                   <Card.Text className="instruction-card-number">5</Card.Text>
-                  <Card.Text className="instruction-card-details">
-                    Tokens are assigned to the wallet and locked in the vesting schedule
-                  </Card.Text>
+                  <div className="informationCard">
+                    <Card.Text className="instruction-card-details">
+                      Tokens are assigned to the wallet and locked in  <br></br> the vesting schedule
+                    </Card.Text>
+                    <Card.Text className="instruction-card-details">
+                      <a className="link"
+                          target="_blank"
+                          href={"https://bscscan.com/address/0x94C6156Da5DF99b3A529b47b54C6ff480c1440bb#readContract"}> Check Your Tokens</a>
+                    </Card.Text>
+                  </div>
                 </Card>
               </Col>
               <Col xs={6}>
