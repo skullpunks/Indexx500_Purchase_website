@@ -198,7 +198,7 @@ const Home = () => {
             </div>
 
             <div className="warningBarContainer">
-              <label htmlFor="viewVideoButton" className="warningBar">Going through the Instructions is highly suggested before proceeding further!!!</label>
+              <label htmlFor="viewVideoButton">Going through the Instructions is highly suggested before proceeding further!!!</label>
             </div>
 
 
