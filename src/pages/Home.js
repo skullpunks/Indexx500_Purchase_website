@@ -177,7 +177,7 @@ const Home = () => {
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <Col xl={6} md={6}>
                 <CardComponent
-                  title="PRO-ICO STAGE 1"
+                  title="PRE-ICO STAGE 1"
                   discount="15%"
                   unitPrice={sprice}
                   progressBar={0}
@@ -290,7 +290,7 @@ const Home = () => {
             <Row className="amount-card">
               <Col xl={6} md={6}>
                 <CardComponent
-                  title="PRO-ICO STAGE 1"
+                  title="PRE-ICO STAGE 1"
                   discount="15%"
                   unitPrice={sprice}
                   progressBar={0}
@@ -300,7 +300,7 @@ const Home = () => {
               </Col>
               <Col xl={6} md={6}>
                 <CardComponent
-                  title="PRO-ICO STAGE 2"
+                  title="PRE-ICO STAGE 2"
                   discount="12%"
                   unitPrice={sprice}
                   progressBar={0}
@@ -310,7 +310,7 @@ const Home = () => {
               </Col>
               <Col xl={6} md={6} style={{ marginTop: 25 }}>
                 <CardComponent
-                  title="PRO-ICO STAGE 3"
+                  title="PRE-ICO STAGE 3"
                   discount="9%"
                   unitPrice={sprice}
                   progressBar={0}
@@ -320,7 +320,7 @@ const Home = () => {
               </Col>
               <Col xl={6} md={6} style={{ marginTop: 25 }}>
                 <CardComponent
-                  title="PRO-ICO STAGE 4"
+                  title="PRE-ICO STAGE 4"
                   discount="6%"
                   unitPrice={sprice}
                   progressBar={0}
@@ -330,7 +330,7 @@ const Home = () => {
               </Col>
               <Col xl={6} md={6} style={{ marginTop: 25 }}>
                 <CardComponent
-                  title="PRO-ICO STAGE 5"
+                  title="PRE-ICO STAGE 5"
                   discount="3%"
                   unitPrice={sprice}
                   progressBar={0}
@@ -340,7 +340,7 @@ const Home = () => {
               </Col>
               <Col xl={6} md={6} style={{ marginTop: 25 }}>
                 <CardComponent
-                  title="PRO-ICO STAGE 6"
+                  title="PRE-ICO STAGE 6"
                   discount="1%"
                   unitPrice={sprice}
                   progressBar={0}
