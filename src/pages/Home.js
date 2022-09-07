@@ -12,6 +12,7 @@ import CardComponent from "../components/Card";
 import { providerOptions } from "../providerOptions";
 import BuyCoin from "./BuyCoin";
 import moment from "moment";
+import InstructionsModal from "../components/InstructionsModal";
 
 const web3Modal = new Web3Modal({
   cacheProvider: false, // optional
@@ -27,6 +28,7 @@ const Home = () => {
   const [sprice, setSprice] = useState("");
   const [signer, setSigner] = useState("");
   const [page, setPage] = useState("HOME");
+  const [showInstructionsModal, setShowInstructionsModal] = useState(false)
 
   const chainlinkABI = [
     {
@@ -175,7 +177,7 @@ const Home = () => {
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <Col xl={6} md={6}>
                 <CardComponent
-                  title="PRO-ICO STAGE 1"
+                  title="PRE-ICO STAGE 1"
                   discount="15%"
                   unitPrice={sprice}
                   progressBar={0}
@@ -195,10 +197,25 @@ const Home = () => {
               BUY NOW
             </div>
 
+            <div className="warningBarContainer">
+              <label htmlFor="viewVideoButton">Going through the Instructions is highly suggested before proceeding further!!!</label>
+            </div>
+
+
+            { showInstructionsModal &&
+                <InstructionsModal
+                    isOpen={showInstructionsModal}
+                    closeModal={() => setShowInstructionsModal(false)}
+                />
+            }
+
 
           </div>
-          <div className="">
+          <div className="instructionsHeading">
             <h2 className="instructions">Instructions</h2>
+            <button id="viewVideoButton" className="viewVideo" onClick={() => setShowInstructionsModal(true)}>
+              Watch Video
+            </button>
           </div>
           <div style={{ marginBottom: "10px" }}>
             <Row>
@@ -206,7 +223,8 @@ const Home = () => {
                 <Card className="instruction-card">
                   <Card.Text className="instruction-card-number">1</Card.Text>
                   <Card.Text className="instruction-card-details">
-                    Click BUY NOW and link Metamask or Coinbase wallet on Binance Smart Chain
+                    Click BUY NOW and link Metamask or Coinbase wallet: <br></br>
+                    Make sure you are on Binance Smart Chain Network
                   </Card.Text>
                 </Card>
               </Col>
@@ -214,8 +232,8 @@ const Home = () => {
                 <Card className="instruction-card">
                   <Card.Text className="instruction-card-number">2</Card.Text>
                   <Card.Text className="instruction-card-details">
-                    Buy tokens with any one of the following:
-                    BUSD / BNB / WBTC / WETH / STRIPE
+                    Payment Options: BUSD / BNB / WBTC / WETH / STRIPE <br></br>
+                    Only Wrapped Bitcoin and Ethereum allowed which is on Binance Chain
                   </Card.Text>
                 </Card>
               </Col>
@@ -231,16 +249,24 @@ const Home = () => {
                 <Card className="instruction-card">
                   <Card.Text className="instruction-card-number">4</Card.Text>
                   <Card.Text className="instruction-card-details">
-                    Approve your tokens to allow access to ICO contract and PAY
+                    Approve your tokens to allow access to ICO contract  <br></br>
+                    Scroll down on Metamask page to confirm approval
                   </Card.Text>
                 </Card>
               </Col>
               <Col xs={6}>
                 <Card className="instruction-card">
                   <Card.Text className="instruction-card-number">5</Card.Text>
-                  <Card.Text className="instruction-card-details">
-                    Tokens are assigned to the wallet and locked in the vesting schedule
-                  </Card.Text>
+                  <div className="informationCard">
+                    <Card.Text className="instruction-card-details">
+                      Tokens are assigned to the wallet and locked in  <br></br> the vesting schedule
+                    </Card.Text>
+                    <Card.Text className="instruction-card-details">
+                      <a className="link"
+                          target="_blank"
+                          href={"https://bscscan.com/address/0x94C6156Da5DF99b3A529b47b54C6ff480c1440bb#readContract"}> Check Your Tokens</a>
+                    </Card.Text>
+                  </div>
                 </Card>
               </Col>
               <Col xs={6}>
@@ -264,7 +290,7 @@ const Home = () => {
             <Row className="amount-card">
               <Col xl={6} md={6}>
                 <CardComponent
-                  title="PRO-ICO STAGE 1"
+                  title="PRE-ICO STAGE 1"
                   discount="15%"
                   unitPrice={sprice}
                   progressBar={0}
@@ -274,7 +300,7 @@ const Home = () => {
               </Col>
               <Col xl={6} md={6}>
                 <CardComponent
-                  title="PRO-ICO STAGE 2"
+                  title="PRE-ICO STAGE 2"
                   discount="12%"
                   unitPrice={sprice}
                   progressBar={0}
@@ -284,7 +310,7 @@ const Home = () => {
               </Col>
               <Col xl={6} md={6} style={{ marginTop: 25 }}>
                 <CardComponent
-                  title="PRO-ICO STAGE 3"
+                  title="PRE-ICO STAGE 3"
                   discount="9%"
                   unitPrice={sprice}
                   progressBar={0}
@@ -294,7 +320,7 @@ const Home = () => {
               </Col>
               <Col xl={6} md={6} style={{ marginTop: 25 }}>
                 <CardComponent
-                  title="PRO-ICO STAGE 4"
+                  title="PRE-ICO STAGE 4"
                   discount="6%"
                   unitPrice={sprice}
                   progressBar={0}
@@ -304,7 +330,7 @@ const Home = () => {
               </Col>
               <Col xl={6} md={6} style={{ marginTop: 25 }}>
                 <CardComponent
-                  title="PRO-ICO STAGE 5"
+                  title="PRE-ICO STAGE 5"
                   discount="3%"
                   unitPrice={sprice}
                   progressBar={0}
@@ -314,7 +340,7 @@ const Home = () => {
               </Col>
               <Col xl={6} md={6} style={{ marginTop: 25 }}>
                 <CardComponent
-                  title="PRO-ICO STAGE 6"
+                  title="PRE-ICO STAGE 6"
                   discount="1%"
                   unitPrice={sprice}
                   progressBar={0}
