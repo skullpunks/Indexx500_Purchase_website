@@ -82,7 +82,7 @@ const CardComponent = ({
               {checkBetween(sdate, edate)
                 ? "56%"
                 : checkAfterDate(edate)
-                  ? "89%"
+                  ? "100%"
                   : "0%"}
             </p>
           </div>
@@ -91,7 +91,7 @@ const CardComponent = ({
               checkBetween(sdate, edate)
                 ? 56
                 : checkAfterDate(edate)
-                  ? 89
+                  ? 100
                   : progressBar
             }
             className="progressBar"
