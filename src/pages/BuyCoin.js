@@ -962,7 +962,7 @@ const BuyCoin = ({ signer, account, networkName }) => {
             style={{ width: 64, height: 64 }}
             alt="indexx logo"
           />
-          <figcaption style={{ color: "#0179fa", fontSize: "larger", fontWeight: "bold" }}>indexx500</figcaption>
+          <figcaption style={{ color: "#0179fa", fontSize: "larger", fontWeight: "bold" }}>Indexx500(IN500)</figcaption>
         </figure>
         <h3 style={{ marginTop: 20, color: "#0179fa", marginBottom: 0 }}>
           SWAP
@@ -1004,7 +1004,7 @@ const BuyCoin = ({ signer, account, networkName }) => {
             />
             <span style={{ fontSize: 10, margin: 0, color: "#808080" }}>
               {/* {from.label} */}
-              indexx
+              IN500
             </span>
           </div>
           <div>
