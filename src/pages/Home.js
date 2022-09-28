@@ -86,10 +86,10 @@ const Home = () => {
         method: "wallet_addEthereumChain",
         params: [
           {
-            chainId: "0x38",
-            chainName: "BSC Mainnet",
-            rpcUrls: ["https://bsc-dataseed1.binance.org/"],
-            blockExplorerUrls: ["https://bscscan.com"],
+            chainId: "0x61",
+            chainName: "BSC Testnet",
+            rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
+            blockExplorerUrls: ["https://testnet.bscscan.com"],
             nativeCurrency: {
               symbol: "BNB",
               decimals: 18,
@@ -145,9 +145,9 @@ const Home = () => {
 
   const indexPrice = async () => {
     let spprice = 0;
-    let spaddr = "0xb24D1DeE5F9a3f761D286B56d2bC44CE1D02DF7e";
+    let spaddr = "0x143db3CEEfbdfe5631aDD3E50f7614B6ba708BA7";
     let rpcProvider = new ethers.providers.JsonRpcProvider(
-      "https://bsc-dataseed1.binance.org/"
+      "https://data-seed-prebsc-1-s1.binance.org:8545/"
     );
     const spFeed = new ethers.Contract(spaddr, chainlinkABI, rpcProvider);
     await spFeed.latestRoundData().then((roundData) => {

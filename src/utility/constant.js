@@ -11,14 +11,24 @@ export const Coins = [
   { label: "BNB", icon: BNBIcon },
   { label: "Stripe", icon: StripeIcon },
 ];
+//main
+// export const PaymentContract = {
+//   BNB: "0x0000000000000000000000000000000000000000",
+//   BUSD: "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
+//   WBTC: "0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c",
+//   WETH: "0x2170Ed0880ac9A755fd29B2688956BD959F933F8",
+//   Stripe: "stripe",
+// };
 
+//test- actually tokens address
 export const PaymentContract = {
   BNB: "0x0000000000000000000000000000000000000000",
-  BUSD: "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
-  WBTC: "0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c",
-  WETH: "0x2170Ed0880ac9A755fd29B2688956BD959F933F8",
+  BUSD: "0x78867BbEeF44f2326bF8DDd1941a4439382EF2A7",
+  WBTC: "0x6ce8dA28E2f864420840cF74474eFf5fD80E65B8",
+  WETH: "0x8BaBbB98678facC7342735486C851ABD7A0d17Ca",
   Stripe: "stripe",
 };
+
 
 export const truncateAddress = (address) => {
   if (!address) return "No Account";

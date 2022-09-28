@@ -8,6 +8,8 @@ import InputText from "../components/InputText";
 import { ethers } from "ethers";
 import { toast } from "react-toastify";
 import TokenButton from "../components/TokenButton/TokenButton";
+import * as axios from "axios";
+import { useSearchParams } from 'react-router-dom';
 
 
 const BuyCoin = ({ signer, account, networkName }) => {
@@ -18,12 +20,19 @@ const BuyCoin = ({ signer, account, networkName }) => {
   const [inputtoken, setInputtoken] = useState("");
   const [buyNowBtn, setBuyNowBtn] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const sp500ChainlinkAddress = "0xb24D1DeE5F9a3f761D286B56d2bC44CE1D02DF7e";
-  const bnbChainlinkAddress = "0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE";
-  const wbtcChainlinkAddress = "0x264990fbd0A4796A3E3d8E37C4d5F87a3aCa5Ebf";
-  const wethChainlinkAddress = "0x9ef1B8c0E4F7dc8bF5719Ea496883DC6401d5b2e";
-  const icoAddress = "0x8bA9A63cac81B09509360d0A027dCE14F90F6779";
+  const [paymentMethodPrice, setPaymentMethodPrice] = useState(0);
+  const [searchParams, _setSearchParams] = useSearchParams();
+  searchParams.get("referralcode")
+  // const sp500ChainlinkAddress = "0xb24D1DeE5F9a3f761D286B56d2bC44CE1D02DF7e";
+  // const bnbChainlinkAddress = "0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE";
+  // const wbtcChainlinkAddress = "0x264990fbd0A4796A3E3d8E37C4d5F87a3aCa5Ebf";
+  // const wethChainlinkAddress = "0x9ef1B8c0E4F7dc8bF5719Ea496883DC6401d5b2e";
+  
+  const sp500ChainlinkAddress = "0x143db3CEEfbdfe5631aDD3E50f7614B6ba708BA7";
+  const bnbChainlinkAddress = "0x2514895c72f50D8bd4B4F9b1110F0D6bD2c97526";
+  const wbtcChainlinkAddress = "0x5741306c21795FdCBb9b265Ea0255F499DFe515C";
+  const wethChainlinkAddress = "0x143db3CEEfbdfe5631aDD3E50f7614B6ba708BA7";
+  const icoAddress = "0xAd413A96957f3752b33810587A22a93D8D4F5367";
 
   const chainlinkABI = [
     {
@@ -800,7 +809,7 @@ const BuyCoin = ({ signer, account, networkName }) => {
     }
 
     let rpcProvider = new ethers.providers.JsonRpcProvider(
-      "https://bsc-dataseed1.binance.org/"
+      "https://data-seed-prebsc-1-s1.binance.org:8545/"
     );
     if (addr === "1") {
       tokenPrice = 1;
@@ -846,7 +855,7 @@ const BuyCoin = ({ signer, account, networkName }) => {
     }
 
     let rpcProvider = new ethers.providers.JsonRpcProvider(
-      "https://bsc-dataseed1.binance.org/"
+      "https://data-seed-prebsc-1-s1.binance.org:8545/"
     );
     if (addr === "1") {
       tokenPrice = 1;
@@ -855,12 +864,14 @@ const BuyCoin = ({ signer, account, networkName }) => {
       await tokenFeed.latestRoundData().then((roundData) => {
         tokenPrice = roundData[1] / 100000000;
         console.log("token value: " + tokenPrice);
+        setPaymentMethodPrice(tokenPrice);
       });
     }
     const spFeed = new ethers.Contract(spaddr, chainlinkABI, rpcProvider);
     await spFeed.latestRoundData().then((roundData) => {
       spprice = roundData[1] / 10000000000;
       console.log("sp500 value: " + spprice);
+      setPaymentMethodPrice(tokenPrice / spprice);
       let rate = inputtoken * (tokenPrice / spprice);
       let inputss = Math.round(rate * 100) / 100;
       setToken(inputss);
@@ -900,7 +911,34 @@ const BuyCoin = ({ signer, account, networkName }) => {
       setBuyNowBtn(false);
       toast.success("Payment Successful");
       setLoading(false);
-      window.location.href = "https://www.indexx.ai/aboute5e75cc8";
+      const affiliateCode = searchParams.get("referralcode");
+      if (affiliateCode !=  undefined || affiliateCode != null) {
+        const paymentTypeUsed = await getPaymentUsed(payment);
+        console.log(paymentTypeUsed)
+        let userPurchaseDetails = {
+          txHash: tx.hash,
+          affiliateCode: affiliateCode,
+          totalTokensPurchased: token,
+          tokensNamePurchased: "Indexx500",
+          userURLtoPurchase: window.location.href,
+          paymentTypeUsed: paymentTypeUsed,
+          paymentTokenPrice: paymentMethodPrice,
+          userIP: "120.434.1.2",
+          userWalletAddress: account,
+        };
+        //https://api.indexx.finance/api/v1/update/purchasedetails
+        let updatePurchaseDetails = await axios.post(
+          " https://1b21-49-207-219-159.ngrok.io/api/v1/update/purchasedetails",
+          userPurchaseDetails
+        );
+        console.log(updatePurchaseDetails, "updatePurchaseDetails");
+        if (updatePurchaseDetails.status === 200) {
+          alert(updatePurchaseDetails.data.message)
+          window.location.href = "https://www.indexx.ai/aboute5e75cc8";
+        }
+      } else {
+        window.location.href = "https://www.indexx.ai/aboute5e75cc8";
+      }
 
     } catch (error) {
       console.log('error', error)
@@ -913,6 +951,25 @@ const BuyCoin = ({ signer, account, networkName }) => {
       toast.error("Transaction Failed. Please again later!");
         }
       setLoading(false);
+    }
+  };
+
+  const getPaymentUsed = async (payment) => {
+    try {
+      switch (payment) {
+        case PaymentContract["BNB"]:
+          return "BNB";
+        case PaymentContract["BUSD"]:
+          return "BUSD";
+        case PaymentContract["WBTC"]:
+          return "WBTC";
+        case PaymentContract["WETH"]:
+          return "WETH";
+        default:
+          return "Stripe";
+      }
+    } catch (err) {
+      console.log("err", err);
     }
   };
 
