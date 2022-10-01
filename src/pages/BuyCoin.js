@@ -928,7 +928,7 @@ const BuyCoin = ({ signer, account, networkName }) => {
         };
         //https://api.indexx.finance/api/v1/update/purchasedetails
         let updatePurchaseDetails = await axios.post(
-          " https://1b21-49-207-219-159.ngrok.io/api/v1/update/purchasedetails",
+          "http://3.115.189.8:5000/api/v1/update/purchasedetails",
           userPurchaseDetails
         );
         console.log(updatePurchaseDetails, "updatePurchaseDetails");
