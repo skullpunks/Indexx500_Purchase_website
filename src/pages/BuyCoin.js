@@ -8,7 +8,8 @@ import InputText from "../components/InputText";
 import { ethers } from "ethers";
 import { toast } from "react-toastify";
 import TokenButton from "../components/TokenButton/TokenButton";
-
+import * as axios from "axios";
+import { useSearchParams } from 'react-router-dom';
 
 const BuyCoin = ({ signer, account, networkName }) => {
   const [to, setTo] = useState(Coins[0]);
@@ -18,6 +19,9 @@ const BuyCoin = ({ signer, account, networkName }) => {
   const [inputtoken, setInputtoken] = useState("");
   const [buyNowBtn, setBuyNowBtn] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [paymentMethodPrice, setPaymentMethodPrice] = useState(0);
+  const [searchParams, _setSearchParams] = useSearchParams();
+  searchParams.get("referralcode")
 
   const sp500ChainlinkAddress = "0xb24D1DeE5F9a3f761D286B56d2bC44CE1D02DF7e";
   const bnbChainlinkAddress = "0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE";
@@ -861,6 +865,7 @@ const BuyCoin = ({ signer, account, networkName }) => {
     await spFeed.latestRoundData().then((roundData) => {
       spprice = roundData[1] / 10000000000;
       console.log("sp500 value: " + spprice);
+      setPaymentMethodPrice(tokenPrice / spprice);
       let rate = inputtoken * (tokenPrice / spprice);
       let inputss = Math.round(rate * 100) / 100;
       setToken(inputss);
@@ -900,7 +905,34 @@ const BuyCoin = ({ signer, account, networkName }) => {
       setBuyNowBtn(false);
       toast.success("Payment Successful");
       setLoading(false);
-      window.location.href = "https://www.indexx.ai/aboute5e75cc8";
+      const affiliateCode = searchParams.get("referralcode");
+      if (affiliateCode !=  undefined || affiliateCode != null) {
+        const paymentTypeUsed = await getPaymentUsed(payment);
+        console.log(paymentTypeUsed)
+        let userPurchaseDetails = {
+          txHash: tx.hash,
+          affiliateCode: affiliateCode,
+          totalTokensPurchased: token,
+          tokensNamePurchased: "IndexxUSD+",
+          userURLtoPurchase: window.location.href,
+          paymentTypeUsed: paymentTypeUsed,
+          paymentTokenPrice: paymentMethodPrice,
+          userIP: "120.434.1.2",
+          userWalletAddress: account,
+        };
+        //https://api.indexx.finance/api/v1/update/purchasedetails
+        let updatePurchaseDetails = await axios.post(
+          "https://1ab9-3-115-189-8.jp.ngrok.io/api/v1/update/purchasedetails",
+          userPurchaseDetails
+        );
+        console.log(updatePurchaseDetails, "updatePurchaseDetails");
+        if (updatePurchaseDetails.status === 200) {
+          alert(updatePurchaseDetails.data.message)
+          window.location.href = "https://www.indexx.ai/aboute5e75cc8";
+        }
+      } else {
+        window.location.href = "https://www.indexx.ai/aboute5e75cc8";
+      }
 
     } catch (error) {
       console.log('error', error)
@@ -916,6 +948,25 @@ const BuyCoin = ({ signer, account, networkName }) => {
     }
   };
 
+  const getPaymentUsed = async (payment) => {
+    try {
+      switch (payment) {
+        case PaymentContract["BNB"]:
+          return "BNB";
+        case PaymentContract["BUSD"]:
+          return "BUSD";
+        case PaymentContract["WBTC"]:
+          return "WBTC";
+        case PaymentContract["WETH"]:
+          return "WETH";
+        default:
+          return "Stripe";
+      }
+    } catch (err) {
+      console.log("err", err);
+    }
+  };
+  
   const approve = async () => {
     if(token < 1) {
       toast.error("Minimum Purchase 1 Indexx Token");

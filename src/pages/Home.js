@@ -177,12 +177,12 @@ const Home = () => {
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <Col xl={6} md={6}>
                 <CardComponent
-                  title="PRE-ICO STAGE 2"
-                  discount="12%"
+                  title="PRE-ICO STAGE 3"
+                  discount="9%"
                   unitPrice={sprice}
                   progressBar={0}
-                  sdate={moment("20220916")}
-                  edate={moment("20220930")}
+                  sdate={moment("20221001")}
+                  edate={moment("20221015")}
                 />
               </Col>
             </div>
