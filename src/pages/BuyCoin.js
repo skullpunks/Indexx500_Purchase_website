@@ -913,7 +913,7 @@ const BuyCoin = ({ signer, account, networkName }) => {
           txHash: tx.hash,
           affiliateCode: affiliateCode,
           totalTokensPurchased: token,
-          tokensNamePurchased: "IndexxUSD+",
+          tokensNamePurchased: "Indexx500",
           userURLtoPurchase: window.location.href,
           paymentTypeUsed: paymentTypeUsed,
           paymentTokenPrice: paymentMethodPrice,
@@ -966,7 +966,7 @@ const BuyCoin = ({ signer, account, networkName }) => {
       console.log("err", err);
     }
   };
-  
+
   const approve = async () => {
     if(token < 1) {
       toast.error("Minimum Purchase 1 Indexx Token");
