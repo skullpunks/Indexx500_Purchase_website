@@ -133,7 +133,7 @@ const Home = () => {
       }
      
     } catch (error) {
-      if (window.confirm(' Please Install Metamask wallet to participate in PRE-ICO ')) {
+      if (window.confirm(' Please Install Metamask wallet to participate in PRE-ICO/ICO ')) {
         window.open(
           'https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en',
           '_blank'
@@ -167,9 +167,9 @@ const Home = () => {
       <Header />
       {page === "HOME" && (
         <Container>
-          <h2 className="welcome-title">Welcome to PRE-ICO of Indexx500(IN500)</h2>
+          <h2 className="welcome-title">Welcome to PRE-ICO/ICO of Indexx500(IN500)</h2>
           <p className="welcome-description">
-            There are 6 stages of Pre-ICO of Indexx500, each stage has 2 weeks
+            There are 3 stages of Pre-ICO and 3 stages of ICO for Indexx500, each stage has 2 weeks
             time frame and discount, do not miss!
           </p>
           <div className="text-center">
@@ -177,12 +177,12 @@ const Home = () => {
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <Col xl={6} md={6}>
                 <CardComponent
-                  title="PRE-ICO STAGE 3"
-                  discount="9%"
+                  title="ICO STAGE 1"
+                  discount="15 %"
                   unitPrice={sprice}
                   progressBar={0}
-                  sdate={moment("20221001")}
-                  edate={moment("20221015")}
+                  sdate={moment("20221015")}
+                  edate={moment("20221031")}
                 />
               </Col>
             </div>
@@ -281,7 +281,7 @@ const Home = () => {
           </div>
           <div className="curculating">
             <h2>
-              <span className="supply">TOTAL PRE-ICO SUPPLY:</span>{" "}
+              <span className="supply">TOTAL PRE-ICO/ICO SUPPLY:</span>{" "}
               <span className="price">150,000</span>
             </h2>
           </div>
@@ -320,8 +320,8 @@ const Home = () => {
               </Col>
               <Col xl={6} md={6} style={{ marginTop: 25 }}>
                 <CardComponent
-                  title="PRE-ICO STAGE 4"
-                  discount="6%"
+                  title="ICO STAGE 1"
+                  discount="15%"
                   unitPrice={sprice}
                   progressBar={0}
                   sdate={moment("20221016")}
@@ -330,8 +330,8 @@ const Home = () => {
               </Col>
               <Col xl={6} md={6} style={{ marginTop: 25 }}>
                 <CardComponent
-                  title="PRE-ICO STAGE 5"
-                  discount="3%"
+                  title="ICO STAGE 2"
+                  discount="10%"
                   unitPrice={sprice}
                   progressBar={0}
                   sdate={moment("20221101")}
@@ -340,8 +340,8 @@ const Home = () => {
               </Col>
               <Col xl={6} md={6} style={{ marginTop: 25 }}>
                 <CardComponent
-                  title="PRE-ICO STAGE 6"
-                  discount="1%"
+                  title="ICO STAGE 3"
+                  discount="5%"
                   unitPrice={sprice}
                   progressBar={0}
                   sdate={moment("20221116")}

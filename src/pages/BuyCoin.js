@@ -922,16 +922,16 @@ const BuyCoin = ({ signer, account, networkName }) => {
         };
         //https://api.indexx.finance/api/v1/update/purchasedetails
         let updatePurchaseDetails = await axios.post(
-          "https://1ab9-3-115-189-8.jp.ngrok.io/api/v1/update/purchasedetails",
+          "https://f099-2406-7400-56-2f85-d0b7-d90b-d95f-a4b9.ngrok.io/api/v1/update/purchasedetails",
           userPurchaseDetails
         );
         console.log(updatePurchaseDetails, "updatePurchaseDetails");
         if (updatePurchaseDetails.status === 200) {
           alert(updatePurchaseDetails.data.message)
-          window.location.href = "https://www.indexx.ai/aboute5e75cc8";
+          window.location.href = "https://tokens.indexx.ai/aboute5e75cc8";
         }
       } else {
-        window.location.href = "https://www.indexx.ai/aboute5e75cc8";
+        window.location.href = "https://tokens.indexx.ai/aboute5e75cc8";
       }
 
     } catch (error) {
