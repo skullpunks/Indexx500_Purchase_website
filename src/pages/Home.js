@@ -13,6 +13,7 @@ import { providerOptions } from "../providerOptions";
 import BuyCoin from "./BuyCoin";
 import moment from "moment";
 import InstructionsModal from "../components/InstructionsModal";
+import { toast } from "react-toastify";
 
 const web3Modal = new Web3Modal({
   cacheProvider: false, // optional
@@ -104,7 +105,7 @@ const Home = () => {
         setPage("BUYCOIN");
         // }
       });
-    
+
     } catch (switchError) {
       console.log(switchError);
     }
@@ -115,7 +116,7 @@ const Home = () => {
       let provider = await web3Modal.connect();
       let library = new ethers.providers.Web3Provider(provider);
       let accounts = await library.listAccounts();
-     
+
       setProvider(provider);
       setLibrary(library);
       if (accounts) setAccount(accounts[0]);
@@ -128,10 +129,10 @@ const Home = () => {
 
       if (network.chainId !== 56) {
         await selectNetwork(library.provider);
-      }else{
+      } else {
         setPage("BUYCOIN");
       }
-     
+
     } catch (error) {
       if (window.confirm(' Please Install Metamask wallet to participate in PRE-ICO/ICO ')) {
         window.open(
@@ -158,6 +159,265 @@ const Home = () => {
     });
   };
 
+  const releaseTokens = async () => {
+    try {
+      let provider = await web3Modal.connect();
+      let library = new ethers.providers.Web3Provider(provider);
+      let accounts = await library.listAccounts();
+
+      setProvider(provider);
+      setLibrary(library);
+      if (accounts) setAccount(accounts[0]);
+
+      const signer = library.getSigner();
+      setSigner(signer);
+      let network = await library.getNetwork();
+      setNetworkName(network.name);
+      setChainId(network.chainId);
+
+      const timelockContractAddr = '0x94C6156Da5DF99b3A529b47b54C6ff480c1440bb';
+      const timelockContractABI = [
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_token",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "constructor"
+        },
+        {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "user",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "value",
+              "type": "uint256"
+            }
+          ],
+          "name": "InitiateLock",
+          "type": "event"
+        },
+        {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "user",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "value",
+              "type": "uint256"
+            }
+          ],
+          "name": "ReleaseLock",
+          "type": "event"
+        },
+        {
+          "inputs": [],
+          "name": "admin",
+          "outputs": [
+            {
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_admin",
+              "type": "address"
+            }
+          ],
+          "name": "changeAdmin",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_lockers",
+              "type": "address"
+            }
+          ],
+          "name": "changeLockers",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address[]",
+              "name": "_investor",
+              "type": "address[]"
+            }
+          ],
+          "name": "changeWithdrawalStatus",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_beneficiary",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "initiateTokenLock",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "name": "lockAmount",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "name": "lockAmountPerPhase",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "lockers",
+          "outputs": [
+            {
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "name": "releaseTime",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "releaseTokens",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "token",
+          "outputs": [
+            {
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "name": "withdrawalStatus",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        }
+      ];
+      const timelockContract = new ethers.Contract(timelockContractAddr, timelockContractABI, signer);
+      const tx = await timelockContract.releaseTokens();
+      console.log(`Transaction hash: ${tx.hash}`);
+      const receipts = await tx.wait();
+      console.log(`Transaction confirmed in block ${receipts.blockNumber}`);
+      console.log(`Gas used: ${receipts.gasUsed.toString()}`);
+      toast.success("Tokens Released Successful");
+    } catch (err) {
+      toast.success("Tokens Released Un-Successful." + err);
+    }
+  }
+
   useEffect(() => {
     indexPrice();
   }, []);
@@ -177,12 +437,12 @@ const Home = () => {
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <Col xl={6} md={6}>
                 <CardComponent
-                  title="ICO STAGE 1"
-                  discount="15 %"
+                  title="ICO STAGE 2"
+                  discount="10%"
                   unitPrice={sprice}
                   progressBar={0}
-                  sdate={moment("20221015")}
-                  edate={moment("20221031")}
+                  sdate={moment("20221101")}
+                  edate={moment("20221115")}
                 />
               </Col>
             </div>
@@ -202,11 +462,11 @@ const Home = () => {
             </div>
 
 
-            { showInstructionsModal &&
-                <InstructionsModal
-                    isOpen={showInstructionsModal}
-                    closeModal={() => setShowInstructionsModal(false)}
-                />
+            {showInstructionsModal &&
+              <InstructionsModal
+                isOpen={showInstructionsModal}
+                closeModal={() => setShowInstructionsModal(false)}
+              />
             }
 
 
@@ -263,8 +523,8 @@ const Home = () => {
                     </Card.Text>
                     <Card.Text className="instruction-card-details">
                       <a className="link"
-                          target="_blank"
-                          href={"https://bscscan.com/address/0x94C6156Da5DF99b3A529b47b54C6ff480c1440bb#readContract"}> Check Your Tokens</a>
+                        target="_blank"
+                        href={"https://bscscan.com/address/0x94C6156Da5DF99b3A529b47b54C6ff480c1440bb#readContract"}> Check Your Tokens</a>
                     </Card.Text>
                   </div>
                 </Card>
@@ -277,8 +537,28 @@ const Home = () => {
                   </Card.Text>
                 </Card>
               </Col>
+              <Col xs={6}>
+                <Card className="instruction-card">
+                  <Card.Text className="instruction-card-number">7</Card.Text>
+                  <Card.Text className="instruction-card-details">
+                    Release tokens
+                    <button id="viewVideoButton" className="viewVideo" onClick={() => releaseTokens()}>
+                      Release Tokens
+                    </button>
+                  </Card.Text>
+                </Card>
+              </Col>
             </Row>
           </div>
+
+
+          {/* <div className="instructionsHeading">
+            <h2 className="instructions">Release Tokens</h2>
+            <button id="viewVideoButton" className="viewVideo" onClick={() => releaseTokens()}>
+              Release Tokens
+            </button>
+          </div> */}
+
           <div className="curculating">
             <h2>
               <span className="supply">TOTAL PRE-ICO/ICO SUPPLY:</span>{" "}
@@ -353,11 +633,11 @@ const Home = () => {
           {/* <div className="walletBtn-connect" onClick={() => connectWallet()}>
             CONNECT WALLET
           </div> */}
-           
+
         </Container>
-        
+
       )}
-      
+
       {page === "BUYCOIN" && <BuyCoin signer={signer} account={account} networkName={networkName} />}
       <br></br><br></br><br></br><br></br>
       <Footer />
