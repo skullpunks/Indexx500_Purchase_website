@@ -418,6 +418,37 @@ const Home = () => {
     }
   }
 
+  const importTokens = async () => {
+    const tokenAddress = "0xf58e5644a650C0e4db0d6831664CF1Cb6A3B005A";
+    const tokenSymbol = "IN500";
+    const tokenDecimals = 18;
+    const tokenImage = "https://indexx-exchange.s3.ap-northeast-1.amazonaws.com/in500.png";
+
+    try {
+      // wasAdded is a boolean. Like any RPC method, an error may be thrown.
+      const wasAdded = await window.ethereum.request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20', // Initially only supports ERC20, but eventually more!
+          options: {
+            address: tokenAddress, // The address that the token is at.
+            symbol: tokenSymbol, // A ticker symbol or shorthand, up to 5 chars.
+            decimals: tokenDecimals, // The number of decimals in the token
+            image: tokenImage, // A string url of the token logo
+          },
+        },
+      });
+
+      if (wasAdded) {
+        console.log('Thanks for your interest!');
+      } else {
+        console.log('Your loss!');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     indexPrice();
   }, []);
@@ -544,6 +575,17 @@ const Home = () => {
                     Release tokens
                     <button id="viewVideoButton" className="viewVideo" onClick={() => releaseTokens()}>
                       Release Tokens
+                    </button>
+                  </Card.Text>
+                </Card>
+              </Col>
+              <Col xs={6}>
+                <Card className="instruction-card">
+                  <Card.Text className="instruction-card-number">8</Card.Text>
+                  <Card.Text className="instruction-card-details">
+                    Import Tokens
+                    <button id="viewVideoButton" className="viewVideo" onClick={() => importTokens()}>
+                      Import Tokens
                     </button>
                   </Card.Text>
                 </Card>
